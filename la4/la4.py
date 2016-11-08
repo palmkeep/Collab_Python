@@ -1,6 +1,3 @@
-from math import *
-
-
 
 # Uppgift 4A
 
@@ -32,6 +29,12 @@ def generate_height(h0, v0, t0, a):
 
 # Uppgift 4C
 
+def smooth_square():
+    smooth_square = smooth(lambda x: x*x)
+    smooth_sin = smooth(lambda x: sin(x))
+    twice_smoothed_square = smooth(smooth_square)
+    twice_smoothed_sin = smooth(smooth_sin)
+
 def smooth (function):
     dx = 0.001
     def finalFunction(x):
@@ -45,13 +48,8 @@ def repeatedly_smoothed(function, times_smoothed):
         function = smooth(function)
     
     return function
+
     
-smooth_square = smooth(lambda x: x*x)
-smooth_sin = smooth(lambda x: sin(x))
-twice_smoothed_square = smooth(smooth_square)
-twice_smoothed_sin = smooth(smooth_sin)
-
-
 # Uppgift 4D 
 
 # Help functions
