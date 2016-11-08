@@ -64,8 +64,6 @@ def interpret(expression, logic_dict):
             elif expression[1] == "OR":
                 return op_or(expression[0], expression[2], logic_dict)
 
-
-
 def op_not(exp1, logic_dict):
     if interpret(exp1, logic_dict) == "true":
         return "false"
