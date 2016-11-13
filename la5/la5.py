@@ -12,15 +12,21 @@ def eval_program(calc, table={}):
         if isstatements(statement):
             for stat in statement:
                 eval_statement(stat)
+
         elif isassignment(statement):
-            pass
+            eval_assignment(statement)
+
         elif isrepetition(statement):
-            pass
+            eval_condition(statement)
+
         elif isselection(statement):
-            pass 
+            eval_selection(statement)
+
         elif isoutput(statement):
             output(statement)
-    
+
+
+
     # EVAL_EXPRESSION
     def eval_expression(exp):
         if isbinary(exp):
@@ -29,6 +35,10 @@ def eval_program(calc, table={}):
             return eval_condition(exp)
         elif isvariable(exp):
             return eval_variable(exp)
+        elif isconstant(exp):
+            return exp
+
+
 
 
     # HELP FUNCTION
@@ -42,23 +52,40 @@ def eval_program(calc, table={}):
             return var
 
     def eval_binary(binary_statement):
-        left_var = eval_program(binary_left(binary_statement), table)
-        right_var = eval_program(binary_right(binary_statement), table)
-        bin_operator = binary_operator(binary_statement)
+        left_var = eval_expression(binary_left(binary_statement), table)
+        right_var = eval_expression(binary_right(binary_statement), table)
+        operator = binary_operator(binary_statement)
 
-        if bin_operator == '+':
+        if operator == '+':
             return left_var + right_var 
-        elif bin_operator == '-':
+        elif operator == '-':
             return left_var - right_var
-        elif bin_operator == '*':
+        elif operator == '*':
             return left_var * right_var
-        elif bin_operator == '/':
+        elif operator == '/':
             return left_var / right_var
 
     def eval_condition(condition_statement):
-        left_cond = eval_program(condition_left(condition_statement), table)
-        right_cond = eval_program(condition_right(condition_statement),table)
-        cond_operator = condition_operator(condition_statement)
+        left_cond = eval_expression(condition_left(condition_statement), table)
+        right_cond = eval_expressionp(condition_right(condition_statement),table)
+        cond = condition_operator(condition_statement)
+
+        if cond == '<':
+            if left_cond < right_cond:
+                return True
+            else:
+                return False
+        elif cond == '>':
+            if left_cond > right_cond:
+                return True
+            else:
+                return False
+        elif cond == '=':
+            if left_cond == right_cond:
+                return True
+            else:
+                return False
+
  
 
     # START: EVAL_PROGRAM
