@@ -13,7 +13,7 @@ def eval_program(calc, table={}):
             for stat in statement:
                 eval_statement(stat)
         elif isassignment(statement):
-            pass
+            eval_assignment(statement)
         elif isrepetition(statement):
             pass
         elif isselection(statement):
@@ -59,6 +59,15 @@ def eval_program(calc, table={}):
         left_cond = eval_program(condition_left(condition_statement), table)
         right_cond = eval_program(condition_right(condition_statement),table)
         cond_operator = condition_operator(condition_statement)
+
+    def eval_assignment(assignment):
+        var = assignment_variable(assignment)
+        exp = assignment_expression(assignment)
+        print(str(var) + " " + str(exp))
+        table[var] = eval_expression(exp)
+        
+    def eval_selection():
+        pass
  
 
     # START: EVAL_PROGRAM
