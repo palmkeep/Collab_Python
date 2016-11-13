@@ -5,7 +5,8 @@
 
 from calc import *
 
-def eval_program(calc, table={}):
+def eval_program(calc, input_table={}):
+    table = dict(input_table)
 
     # EVAL_STATEMENT
     def eval_statement(statement):
@@ -27,6 +28,9 @@ def eval_program(calc, table={}):
         elif isinput(statement):
             eval_input(statement)
 
+        else:
+            raise IOError(statement, 'not a statement')
+
 
 
     # EVAL_EXPRESSION
@@ -39,6 +43,8 @@ def eval_program(calc, table={}):
             return eval_variable(exp)
         elif isconstant(exp):
             return exp
+        else:
+            raise IOError(exp, 'not an expression')
 
 
 
@@ -48,7 +54,8 @@ def eval_program(calc, table={}):
 
     def eval_input(input_statement):
         var = input_variable(input_statement)
-        table[var] = input()
+        table[var] = input('Enter value for ' + var + ': ')
+        print(var + ' = ' + table[var] + '\n')
 
     def eval_variable(var):
         if var in table:
@@ -69,6 +76,8 @@ def eval_program(calc, table={}):
             return left_var * right_var
         elif operator == '/':
             return left_var / right_var
+        else:
+            raise IOError(operator, 'not a binary operator')
 
     def eval_assignment(assignment):
         var = assignment_variable(assignment)
