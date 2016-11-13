@@ -15,7 +15,6 @@ def eval_program(calc, table={}):
 
         elif isassignment(statement):
             eval_assignment(statement)
-
         elif isrepetition(statement):
             eval_repetition(statement)
 
@@ -99,6 +98,8 @@ def eval_program(calc, table={}):
 
     def eval_selection(selection):
         print(1)        
+
+        
  
 
     # START: EVAL_PROGRAM
