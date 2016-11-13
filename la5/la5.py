@@ -5,12 +5,49 @@
 
 from calc import *
 
-def eval_program(calc, table):
+def eval_program(calc, table={}):
 
+
+    # EVAL_STATEMENT
+    def eval_statement(statement, table)
+        elif isstatements(calc):
+            eval_program(first_statement(calc), table)
+            eval_program(rest_statement(calc), table)
+        elif isassignment(calc):
+            pass
+        elif isrepetition(calc):
+            print(repetition_condition(calc))
+            while repetition_condition(calc):
+                eval_program(repetition_statements(calc), table)
+        elif isselection(calc):
+            pass 
+        elif isoutput(calc):
+            output(calc)
+        elif isbinary(calc):
+            return eval_binary(calc)
+        elif iscondition(calc):
+            return eval_condition(calc)
+        elif isinput(calc):
+            pass
+        elif isvariable(calc):
+            return get_variable(calc)
+
+
+    # EVAL_EXPRESSION
+    def eval_expression(exp, table):
+        if isbinary(exp):
+            return eval_binary(exp)
+        elif iscondition(exp):
+            return eval_condition(exp)
+        elif isvariable(exp):
+            return eval_variable(exp)
+
+
+    # HELP FUNCTION
     def output(output_statement):
         print(eval_program(output_variable(output_statement), table))
 
-    def get_variable(var):
+    def eval_variable(var):
         if var in table:
             return table[var]
         else:
@@ -34,49 +71,14 @@ def eval_program(calc, table):
         left_cond = eval_program(condition_left(condition_statement), table)
         right_cond = eval_program(condition_right(condition_statement),table)
         cond_operator = condition_operator(condition_statement)
-        
-        if cond_operator == '<':
-            if left_cond < right_cond:
-                return True
-            else:
-                return False
-        elif cond_operator == '>':
-            if left_cond > right_cond:
-                return True
-            else:
-                return False
-        elif cond_operator == '=':
-            if left_cond == right_cond:
-                return True
-            else:
-                return False
+ 
 
-
-
+    # START: EVAL_PROGRAM
     if isprogram(calc):
         for statement in calc[1:]:
             table = eval_program(statement, table)
-    elif isstatements(calc):
-        eval_program(first_statement(calc), table)
-        eval_program(rest_statement(calc), table)
-    elif isassignment(calc):
-        pass
-    elif isrepetition(calc):
-        while repetition_condition(calc):
-            eval_program(repetition_statements(calc), table)
-    elif isselection(calc):
-        pass 
-    elif isoutput(calc):
-        output(calc)
-    elif isbinary(calc):
-        return eval_binary(calc)
-    elif iscondition(calc):
-        return eval_condition(calc)
-    elif isinput(calc):
-        pass
-    elif isvariable(calc):
-        return get_variable(calc)
-
+    else:
+        raise IOError("Invalid input")
 
 
 
