@@ -15,7 +15,6 @@ def eval_program(calc, table={}):
 
         elif isassignment(statement):
             eval_assignment(statement)
-
         elif isrepetition(statement):
             eval_condition(statement)
 
@@ -86,6 +85,16 @@ def eval_program(calc, table={}):
             else:
                 return False
 
+
+
+    def eval_assignment(assignment):
+        var = assignment_variable(assignment)
+        exp = assignment_expression(assignment)
+        print(str(var) + " " + str(exp))
+        table[var] = eval_expression(exp)
+        
+    def eval_selection():
+        pass
  
 
     # START: EVAL_PROGRAM
