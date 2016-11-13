@@ -22,7 +22,9 @@ def eval_program(calc, table={}):
             eval_selection(statement)
 
         elif isoutput(statement):
-            output(statement)
+            eval_output(statement)
+        elif isinput(statement):
+            eval_input(statement)
 
 
 
@@ -39,9 +41,13 @@ def eval_program(calc, table={}):
 
 
 
-    # HELP FUNCTION
-    def output(output_statement):
-        print(eval_expression(output_variable(output_statement)))
+    # HELP FUNCTIONS
+    def eval_output(expression):
+        print(eval_expression(output_variable(statement)))
+
+    def eval_input(input_statement):
+        var = input_variable(input_statement)
+        table[var] = input()
 
     def eval_variable(var):
         if var in table:
@@ -96,9 +102,8 @@ def eval_program(calc, table={}):
                 return False
 
     def eval_selection(selection):
-        print(1)        
-
-        
+        print(1)
+ 
  
 
     # START: EVAL_PROGRAM
