@@ -7,34 +7,22 @@ from calc import *
 
 def eval_program(calc, table={}):
 
-
     # EVAL_STATEMENT
-    def eval_statement(statement, table)
-        elif isstatements(calc):
-            eval_program(first_statement(calc), table)
-            eval_program(rest_statement(calc), table)
-        elif isassignment(calc):
+    def eval_statement(statement):
+        if isstatements(statement):
+            for stat in statement:
+                eval_statement(stat)
+        elif isassignment(statement):
             pass
-        elif isrepetition(calc):
-            print(repetition_condition(calc))
-            while repetition_condition(calc):
-                eval_program(repetition_statements(calc), table)
-        elif isselection(calc):
+        elif isrepetition(statement):
+            pass
+        elif isselection(statement):
             pass 
-        elif isoutput(calc):
-            output(calc)
-        elif isbinary(calc):
-            return eval_binary(calc)
-        elif iscondition(calc):
-            return eval_condition(calc)
-        elif isinput(calc):
-            pass
-        elif isvariable(calc):
-            return get_variable(calc)
-
-
+        elif isoutput(statement):
+            output(statement)
+    
     # EVAL_EXPRESSION
-    def eval_expression(exp, table):
+    def eval_expression(exp):
         if isbinary(exp):
             return eval_binary(exp)
         elif iscondition(exp):
@@ -75,8 +63,8 @@ def eval_program(calc, table={}):
 
     # START: EVAL_PROGRAM
     if isprogram(calc):
-        for statement in calc[1:]:
-            table = eval_program(statement, table)
+        eval_statement(program_statements(calc))
+        return table
     else:
         raise IOError("Invalid input")
 
