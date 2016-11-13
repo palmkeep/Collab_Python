@@ -39,10 +39,9 @@ def eval_program(calc, table={}):
 
 
 
-
     # HELP FUNCTION
     def output(output_statement):
-        print('Output',eval_expression(output_variable(output_statement)))
+        print(eval_expression(output_variable(output_statement)))
 
     def eval_variable(var):
         if var in table:
