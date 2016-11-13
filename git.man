@@ -1,0 +1,47 @@
+Git
+
+!#! You have an alias set in your .bashrc:
+        alias startx='ssh-agent startx'
+    which starts x with ssh-agent as a wrapper, this simplifies a lot of things.
+
+
+
+How to init
+    - navigate to folder                                        #
+    - exec: git init                                            # Create .git folder
+    - exec: git remote add <remote> <ssh link>                  # Bind remote repo to current folder
+    - exec: fetch <remote>                                      # Gets the repo at <remote>
+    - exec: git branch <local-branch> <remote>/<remote-branch>  # Tie <local-branch> to a remote branch
+    - exec: git checkout <local-branch>                         # Switches to <local-branch> for current folder
+    DONE
+
+
+
+
+
+Remember to add ssh keys to ssh-agent with:
+    ssh-add ~/.ssh/id_rsa       # You should fix this automatically 
+
+Display url for the repository mounted in the current folder
+    git remote -v
+
+Display remote branches
+    git branch -r
+
+Gets the branch 
+    git fetch master
+
+
+
+
+Makes <local-branch> track changes in the <remote-brancg> at <remote>
+    git branch <local-branch> <remote>/<remote-branch>
+
+    # GitHub ex: git branch wd master/wd-palmkeep
+
+
+Pushes <local-branch> to <remote-branch> at <remote-top-branch>
+    git push <remote-top-branch> <local-branch>:<remote-branch>
+    
+    # Git stores branches as master/<"name of branch">
+
