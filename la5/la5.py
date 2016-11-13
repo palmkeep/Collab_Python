@@ -17,7 +17,7 @@ def eval_program(calc, table={}):
             eval_assignment(statement)
 
         elif isrepetition(statement):
-            eval_condition(statement)
+            eval_repetition(statement)
 
         elif isselection(statement):
             eval_selection(statement)
@@ -43,17 +43,17 @@ def eval_program(calc, table={}):
 
     # HELP FUNCTION
     def output(output_statement):
-        print(eval_program(output_variable(output_statement), table))
+        print('Output',eval_expression(output_variable(output_statement)))
 
     def eval_variable(var):
         if var in table:
             return table[var]
         else:
-            return var
+            raise IOError(var, 'is not defined')
 
     def eval_binary(binary_statement):
-        left_var = eval_expression(binary_left(binary_statement), table)
-        right_var = eval_expression(binary_right(binary_statement), table)
+        left_var = eval_expression(binary_left(binary_statement))
+        right_var = eval_expression(binary_right(binary_statement))
         operator = binary_operator(binary_statement)
 
         if operator == '+':
@@ -65,10 +65,21 @@ def eval_program(calc, table={}):
         elif operator == '/':
             return left_var / right_var
 
-    def eval_condition(condition_statement):
-        left_cond = eval_expression(condition_left(condition_statement), table)
-        right_cond = eval_expressionp(condition_right(condition_statement),table)
-        cond = condition_operator(condition_statement)
+    def eval_assignment(assignment):
+        var = assignment_variable(assignment)
+        exp = eval_expression(assignment_expression(assignment))
+        table[var] = exp
+
+    def eval_repetition(repetition):
+        cond = repetition_condition(repetition)
+        statements = repetition_statements(repetition)
+        while eval_condition(cond):
+            eval_statement(statements)
+
+    def eval_condition(condition):
+        left_cond = eval_expression(condition_left(condition))
+        right_cond = eval_expression(condition_right(condition))
+        cond = condition_operator(condition)
 
         if cond == '<':
             if left_cond < right_cond:
@@ -86,6 +97,8 @@ def eval_program(calc, table={}):
             else:
                 return False
 
+    def eval_selection(selection):
+        print(1)        
  
 
     # START: EVAL_PROGRAM
