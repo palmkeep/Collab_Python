@@ -8,6 +8,7 @@
 #   vikpa####, andpa149
 #
 
+from math import sin
 
 
 # Uppgift 4A
@@ -180,10 +181,7 @@ def contains_key(key, tree):
     inmatade $key värdet.
     """
     def inner_node_fn2(node, left_value, right_value):
-        if node == key or left_value or right_value:
-            return True
-        else: 
-            return False
+        return node == key or left_value or right_value
 
     def leaf_fn2(leaf):
         if leaf == key:
