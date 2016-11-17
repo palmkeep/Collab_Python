@@ -35,7 +35,7 @@ def eval_program(calc, input_table={}):
 
     # EVAL_EXPRESSION
     def eval_expression(exp):
-        if isbinary(exp):
+        if isbinary(exp): 
             return eval_binary(exp)
         elif iscondition(exp):
             return eval_condition(exp)
@@ -50,12 +50,14 @@ def eval_program(calc, input_table={}):
 
     # HELP FUNCTIONS
     def eval_output(expression):
-        print(eval_expression(output_variable(expression)))
+        variable = output_variable(expression)
+        value = eval_expression(variable)
+        print(str(variable)+" = "+str(value) + "\n")
 
     def eval_input(input_statement):
         var = input_variable(input_statement)
-        table[var] = input('Enter value for ' + var + ': ')
-        print(var + ' = ' + table[var] + '\n')
+        table[var] = int(input('Enter value for ' + var + ': '))
+        #print(var + ' = ' + str(table[var]) + '\n')
 
     def eval_variable(var):
         if var in table:
