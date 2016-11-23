@@ -1,4 +1,5 @@
-print("test_a and test_b imported")
+if __name__ == "__main__":
+    print("Contains variables test_a and test_b. Import them manually.")
 
 test_a = ['calc', ['set', 'x', 1], ['set', 'i', 1], ['while', ['i','<',11], ['set', 'x', ['x', '*', 'i']], ['set', 'i', ['i', '+', 1]], ['print', 'x'] ] ]
 #test_ a = ['calc', 
