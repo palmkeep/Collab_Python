@@ -5,7 +5,7 @@
 #   Uppgift 4 (A-D)
 #
 #   Viktor Palm och André Palmborg
-#   vikpa####, andpa149
+#   vikpa137, andpa149
 #
 
 from math import sin
@@ -13,32 +13,37 @@ from math import sin
 
 # Uppgift 4A
 
-def powerset(orig_set):
+def merge(e, l):
     """
-    Returnerar en lista med alla möjliga listor som kan skapas av de
-    inmatade elementen.
+    Slår ihop saker.
     """
-    powerset = [[]] # Start with a list containing the empty set
-    for i in range(1, 1 + len(orig_set)):
-        powerset = unordered_choose(orig_set, i, powerset)
-    return powerset
+    if l:
+        result = [[e]+l[0]] +  merge(e, l[1:])
+        return result
+    else:
+        return []    
 
-def unordered_choose(list_elements, cardinality, list_chosen = [], chosen = []):
+def NchooseK(l, n):
     """
-    Returnerar alla listor av satt längd som kan skapas av elementen
-    som matats in.
+    Den tar en lista och så skapar den alla delmängder av storlek n.
     """
-    for i in range(1 + len(list_elements) - cardinality):
-        chosen.append(list_elements[i])
+    if len(l) == n:
+        return [l]
+    elif n != 0:
+        return merge(l[0], NchooseK(l[1:], n-1))+ NchooseK(l[1:], n)
+    else:
+        return [[]]
 
-        if cardinality == 1:
-            list_chosen.append(chosen[:])
-        else:
-            list_chosen = unordered_choose( list_elements[i+1:], cardinality - 1,
-                                            list_chosen, chosen)
-        chosen.pop()
-
-    return list_chosen
+def powerset(l, n = -1):
+    """
+    Den skapar powerset.
+    """
+    if n == -1:
+        n = len(l)
+    if n != 0:
+        return NchooseK(l, n) + powerset(l, n-1)
+    else:
+        return [[]]
 
 
 # Uppgift 4B
