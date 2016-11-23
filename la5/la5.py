@@ -6,10 +6,17 @@
 from calc import *
 
 def eval_program(calc, input_table={}):
+    """
+    Evaluerar och kör kod skriven i "calc-språket". Resulterande variabler
+    sparas i en dictionary som eval_program() returnerar.
+    """
     table = dict(input_table)
 
     # EVAL_STATEMENT
     def eval_statement(statement):
+        """
+        Ser till att rätt funktion används på ett statement.
+        """
         if isstatements(statement):
             for stat in statement:
                 eval_statement(stat)
@@ -35,6 +42,9 @@ def eval_program(calc, input_table={}):
 
     # EVAL_EXPRESSION
     def eval_expression(exp):
+        """
+        Ser till att rätt funktion används på ett expression. 
+        """
         if isbinary(exp): 
             return eval_binary(exp)
         elif iscondition(exp):
@@ -50,22 +60,33 @@ def eval_program(calc, input_table={}):
 
     # HELP FUNCTIONS
     def eval_output(expression):
+        """
+        Skriver ut en variabel i terminalen.
+        """
         variable = output_variable(expression)
         value = eval_expression(variable)
-        print(str(variable)+" = "+str(value) + "\n")
+        print(str(variable) + " = " + str(value))
 
     def eval_input(input_statement):
+        """
+        Läser in ett värde från tangentbordet.
+        """
         var = input_variable(input_statement)
         table[var] = int(input('Enter value for ' + var + ': '))
-        #print(var + ' = ' + str(table[var]) + '\n')
 
     def eval_variable(var):
+        """
+        Returnerar värdet på en variabel.
+        """
         if var in table:
             return table[var]
         else:
             raise IOError(var, 'is not defined')
 
     def eval_binary(binary_statement):
+        """
+        Evaluerar och returnerar ett uttryck med en binär operator.
+        """
         left_var = eval_expression(binary_left(binary_statement))
         right_var = eval_expression(binary_right(binary_statement))
         operator = binary_operator(binary_statement)
@@ -82,17 +103,26 @@ def eval_program(calc, input_table={}):
             raise IOError(operator, 'not a binary operator')
 
     def eval_assignment(assignment):
+        """
+        Sätter, skapar och sparar variabler i $table och ger dem ett värde.
+        """
         var = assignment_variable(assignment)
         exp = eval_expression(assignment_expression(assignment))
         table[var] = exp
 
     def eval_repetition(repetition):
+        """
+        Evaluerar och kör en 'while'-loop.
+        """
         cond = repetition_condition(repetition)
         statements = repetition_statements(repetition)
         while eval_condition(cond):
             eval_statement(statements)
 
     def eval_condition(condition):
+        """
+        Evaluerar och returnerar resultatet av en jämförelse-sats.
+        """
         left_cond = eval_expression(condition_left(condition))
         right_cond = eval_expression(condition_right(condition))
         cond = condition_operator(condition)
@@ -114,6 +144,9 @@ def eval_program(calc, input_table={}):
                 return False
 
     def eval_selection(selection):
+        """
+        Evaluerar och kör olika statement-satser beroende på en jämförelse-sats.
+        """
         if eval_condition(selection_condition(selection)):
             eval_statement(selection_true(selection))
         elif hasfalse(selection):
@@ -121,13 +154,12 @@ def eval_program(calc, input_table={}):
  
  
 
-    # START: EVAL_PROGRAM
+    # EXEC START: EVAL_PROGRAM
     if isprogram(calc):
         eval_statement(program_statements(calc))
         return table
     else:
         raise IOError("Invalid input")
-
 
 
 
