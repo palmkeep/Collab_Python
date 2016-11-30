@@ -12,9 +12,27 @@ from math import sin
 
 # Uppgift 4A
 
-# -----
-# TODO: Komplettering 1
-# -----
+def merge(e, l):
+    """
+    Slår ihop saker.
+    """
+    if l:
+        result = [[e]+l[0]] + merge(e, l[1:])
+        return result
+    else:
+        return []
+
+def NchooseK(l, n):
+    """
+    Den tar en lista och så skapar den alla delmängder av storlek n.
+    """
+    if len(l) == n:
+        return [l]
+    elif n != 0:
+        return merge(l[0], NchooseK(l[1:], n-1)) + NchooseK(l[1:], n)
+    else:
+        return [[]]
+
 
 # Uppgift 4B
 
