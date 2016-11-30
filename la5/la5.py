@@ -3,6 +3,9 @@
 
 # LAB 5 #
 
+# -----
+# Komplettering 3
+# -----
 from calc import *
 
 def eval_program(calc, input_table={}):
@@ -10,6 +13,9 @@ def eval_program(calc, input_table={}):
     Evaluerar och kör kod skriven i "calc-språket". Resulterande variabler
     sparas i en dictionary som eval_program() returnerar.
     """
+    # -----
+    # TODO: Komplettering 4
+    # -----
     table = dict(input_table)
 
     # EVAL_STATEMENT
@@ -143,6 +149,9 @@ def eval_program(calc, input_table={}):
             else:
                 return False
 
+    # -----
+    # Komplettering 5
+    # -----
     def eval_selection(selection):
         """
         Evaluerar och kör olika statement-satser beroende på en jämförelse-sats.
@@ -153,7 +162,9 @@ def eval_program(calc, input_table={}):
             eval_statement(selection_false(selection))
  
  
-
+    # -----
+    # TODO: Komplettering 1 och 2
+    # -----
     # EXEC START: EVAL_PROGRAM
     if isprogram(calc):
         eval_statement(program_statements(calc))

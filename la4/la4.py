@@ -4,47 +4,17 @@
 #
 #   Uppgift 4 (A-D)
 #
-#   Viktor Palm och André Palmborg
-#   vikpa137, andpa149
+#   Viktor Palm     André Palmborg
+#   vikpa137        andpa149
 #
 
 from math import sin
 
-
 # Uppgift 4A
 
-def merge(e, l):
-    """
-    Slår ihop saker.
-    """
-    if l:
-        result = [[e]+l[0]] +  merge(e, l[1:])
-        return result
-    else:
-        return []    
-
-def NchooseK(l, n):
-    """
-    Den tar en lista och så skapar den alla delmängder av storlek n.
-    """
-    if len(l) == n:
-        return [l]
-    elif n != 0:
-        return merge(l[0], NchooseK(l[1:], n-1))+ NchooseK(l[1:], n)
-    else:
-        return [[]]
-
-def powerset(l, n = -1):
-    """
-    Den skapar powerset.
-    """
-    if n == -1:
-        n = len(l)
-    if n != 0:
-        return NchooseK(l, n) + powerset(l, n-1)
-    else:
-        return [[]]
-
+# -----
+# TODO: Komplettering 1
+# -----
 
 # Uppgift 4B
 
@@ -186,7 +156,10 @@ def contains_key(key, tree):
     inmatade $key värdet.
     """
     def inner_node_fn2(node, left_value, right_value):
-        return node == key or left_value or right_value
+        if node == key or left_value or right_value:
+            return True
+        else: 
+            return False
 
     def leaf_fn2(leaf):
         if leaf == key:
