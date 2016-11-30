@@ -33,6 +33,17 @@ def NchooseK(l, n):
     else:
         return [[]]
 
+def powerset(l, n=-1):
+    """
+    Den skapar powerset.
+    """
+    if n == 1:
+        n = len(l)
+    if n != 0:
+        return NchooseK(l, n) + powerset(l, n-1)
+    else:
+        return [[]]
+
 
 # Uppgift 4B
 
