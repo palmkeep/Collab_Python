@@ -17,7 +17,7 @@ def merge(e, l):
     Slår ihop saker.
     """
     if l:
-        result = [[e]+l[0]] + merge(e, l[1:])
+        result = [[e] + l[0]] + merge(e, l[1:])
         return result
     else:
         return []
@@ -37,7 +37,7 @@ def powerset(l, n=-1):
     """
     Den skapar powerset.
     """
-    if n == 1:
+    if n == -1:
         n = len(l)
     if n != 0:
         return NchooseK(l, n) + powerset(l, n-1)
