@@ -1,0 +1,17 @@
+Jag har kommenterat #TODO i er fil på de områden som bör kompletteras och markerat med en siffra för att koppla med siffran i detta dokument. Behåll kompletteringskommentarerna s.a. jag vet var jag ska kolla när ni lämnar in kompletteringen. 
+
+Vad som var bra:
+- Ni har skrivit koden runt funktionellt och använt av lämpliga funktionsnamn.
+- I generellt sett väldigt lättläst och välstrukturerad kod.
+- Riktigt bra att ni har tänkt på felhantering.
+
+Vad som kan tänkas tills nästa gång:
+- Det finns olika typer av fel man kan hantera. Det är inte "Raise IOError" som används i detta sammanhang (förutom kanske i input- och output-satserna). Antingen är det mer lämpligt att ta reda på vilka typer av fel man kan få eller dra alla under "Raise Exception". 
+- Skriv ALLT på engelska. Detta inkluderar funktionsnamn, variabelnamn, kommentarer... Det blir mer konsistent.
+
+Vad som bör kompletteras:
+- Komplettering 1: För att det ska hållas fullt funktionellt behöver vi returnera en kopia av vår table om den modifieras. Se till att kopiera er table där de modifieras. Kolla uppgiftsbeskrivningen om ni inte vet hur man ska kopiera. Ni behöver kopiera på fler ställen i koden än det stället jag har kommenterat.
+- Komplettering 2: Det är skillnad mellan STATEMENT och STATEMENTS. För att följa språkets definition behöver ni även definiera STATEMENTS och utnyttja den vid de konstruktioner som använder STATEMENTS i sin syntax. Ni behöver justera vid fler ställen i koden än det stället jag har kommenterat. 
+- Komplettering 3: Glöm inte era namn och LiU-ID:n.
+- Komplettering 4: Ni får inte använda er av en global table. Det ska vara fullt funktionellt och alla funktioner ska mer eller mindre ta in en table. Tänk på att era funktioner ska hantera vilken table som helst, inte bara er globala table.
+- Komplettering 5: Som jag nämnt om att det ska vara fullt funktionellt; många funktioner behöver returnera något (tips! er table) om de inte redan returnerar något eller har inkorrekt format. Ni behöver justera vid fler ställen i koden än det stället jag har kommenterat.

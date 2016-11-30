@@ -1,0 +1,15 @@
+Jag har kommenterat #TODO i er fil på de områden som bör kompletteras och markerat med en siffra för att koppla med siffran i detta dokument. Behåll kompletteringskommentarerna s.a. jag vet var jag ska kolla när ni lämnar in kompletteringen. 
+
+Vad som var bra:
+- 4B är kort och koncis. 
+- 4C finns det inte så mycket och säga om. Bra jobbat!
+- 4D är riktigt snyggt skrivet. Det är bra att ni har definierat hjälpfunktionerna inom egna ramar. Det blir mer lättläst och mer lättförståeligt. Ni utnyttjar traverse på lämpligt sätt. Två tummar upp!
+
+Vad som kan tänkas tills nästa gång:
+- Skriv ALLT på engelska. Variabelnamn, funktionnamn, kommentarer etc. Det blir mer konsistent.
+- Läs uppgiftsbeskrivningen mer noggrant. Hjälpfunktionerna för 4D (binära sökträdet) finns redan definierat i laboration 3, så ni behövde inte göra egna. :)
+- Tänk på att ha förståeliga namn på variabler, funktioner etc. Förutom att "finalFunction" är camelcase säger inte namnet särskilt mycket.   
+
+Vad som bör kompletteras:
+- Komplettering 1: Uppgift 4A följer inte den lösningsgång jag söker. I uppgiftsbeskrivningen står det specifikt: "Du får inte heller använda några iterativa strukturer (vanliga for-loopar eller liknande), utan alla former av upprepning ska lösas antingen med hjälp av listbyggare eller med rekursiva funktioner.". Det är nog mest lämpligt att börja om 4A. Tänk rekursivt och med listbyggare. Ni får använda "i for i in" i era listbyggare. Syftet med uppgiften är att ni ska visa att ni har förstått hur listbyggare fungerar. Meddela mig om ni behöver hjälp.
+- Komplettering 2: Skapa en "grupp.txt" med LiU-ID:n i SVN-rotmappen så att jag enklare kan se vilka studenter som använder detta repo 
