@@ -12,38 +12,14 @@ from math import sin
 
 # Uppgift 4A
 
-def merge(e, l):
-    """
-    Slår ihop saker.
-    """
-    if l:
-        result = [[e] + l[0]] + merge(e, l[1:])
-        return result
-    else:
-        return []
-
-def NchooseK(l, n):
-    """
-    Den tar en lista och så skapar den alla delmängder av storlek n.
-    """
-    if len(l) == n:
-        return [l]
-    elif n != 0:
-        return merge(l[0], NchooseK(l[1:], n-1)) + NchooseK(l[1:], n)
-    else:
+def powerset(seq):
+    """rekursiv och dann som faAn din javel"""
+    
+    if not seq:
         return [[]]
-
-def powerset(l, n=-1):
-    """
-    Den skapar powerset.
-    """
-    if n == -1:
-        n = len(l)
-    if n != 0:
-        return NchooseK(l, n) + powerset(l, n-1)
     else:
-        return [[]]
-
+        rest = test(seq[1:])
+        return [[seq[0]] + i for i in rest] + rest
 
 # Uppgift 4B
 
