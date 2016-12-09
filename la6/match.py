@@ -25,19 +25,10 @@ def match(seq, pattern):
     else:
         return False
 
+
 def search(seq, pattern):
     if not seq:
         return None
     elif match(seq[0], pattern):
         print(seq[0])
     return search(seq[1:], pattern)
-
-
-#def et_impera(seq, pivot):
-#    if seq[0] < pivot:
-#        return 
-#    else:
-#        return 
-
-    
-    
