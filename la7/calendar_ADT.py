@@ -571,6 +571,8 @@ def are_overlapping(ts1, ts2):
 
 # Calculates the overlapping part of two time spans.
 # This is poorly written, and demands re-implementation (6A).
+
+"""
 def overlap(ts1, ts2):
     # Violates abstraction layers (etc).
     min1 = max(ts1[1][0][1][0][1]*60+ts1[1][0][1][1][1], 
@@ -579,7 +581,7 @@ def overlap(ts1, ts2):
     min2 = min(ts1[1][1][1][0][1]*60+ts1[1][1][1][1][1], 
                 ts2[1][1][1][0][1]*60+ts2[1][1][1][1][1])
     return ('span', (('time', (('hour', min1//60), ('minute', min1%60))), ('time', (('hour', min2//60), ('minute', min2%60)))))
-
+"""
 def overlap(ts1, ts2):
     ensure(ts1, is_time_span)
     ensure(ts2, is_time_span)
@@ -613,10 +615,22 @@ def overlap(ts1, ts2):
 
 # Transform a span into a duration. That is, merely calculate the length
 # of the span. This should be implemented in 6A.
+"""
 def length_of_span(ts):
     # To rewrite.
     mins = ts[1][1][1][1][1] + ts[1][1][1][0][1]*60 - ts[1][0][1][1][1] - ts[1][0][1][0][1]*60
     return ('duration', (('hour', mins//60), ('minute', mins%60)))
+"""
+def length_of_span(ts):
+    ts_s_h = get_integer(get_hour(start_time(ts)))
+    ts_s_m = get_integer(get_minute(start_time(ts)))
+
+    ts_e_h = get_integer(get_hour(end_time(ts)))
+    ts_e_m = get_integer(get_minute(end_time(ts)))
+
+    mins = ts_e_h*60 + ts_e_m - ts_s_h*60 - ts_s_m
+
+    return new_duration(new_hour(mins // 60), new_minute(mins % 60))
 
 
 # Create a time object corresponding to the input "HH:MM".
