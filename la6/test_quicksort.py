@@ -1,4 +1,13 @@
-from random import randrange
+# -*- coding: utf-8
+
+# LAB 6 #
+
+#   Viktor Palm     André Palmborg
+#   vikpa137        andpa149
+
+
+
+import randrange
 from quicksort import quicksort
 
 

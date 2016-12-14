@@ -1,3 +1,12 @@
+# -*- coding: utf-8
+
+# LAB 6 #
+
+#   Viktor Palm     André Palmborg
+#   vikpa137        andpa149
+
+
+
 def quicksort(seq):
     if not seq:
         return []

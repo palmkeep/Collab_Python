@@ -1,34 +1,47 @@
 # -*- coding: utf-8
 
+# LAB 6 #
 
-def match(seq, pattern):
+#   Viktor Palm     André Palmborg
+#   vikpa137        andpa149
+
+
+
+def match(pattern, seq):
     """
-    Returns whether given sequence matches the given pattern
+    Returns whether a given sequence matches the given pattern
     """
     if not pattern:
         return not seq
     elif pattern[0] == '--':
-        if match(seq, pattern[1:]):
+        if match(pattern[1:], seq):
             return True
         elif not seq:
             return False
         else:
-            return match(seq[1:], pattern)
+            return match(pattern, seq[1:])
     elif not seq:
         return False 
     elif isinstance(pattern[0], list) and isinstance(seq[0], list):
-        return match(seq[0], pattern[0]) and match(seq[1:], pattern[1:])
+        return match(pattern[0], seq[0]) and match(pattern[1:], seq[1:])
     elif pattern[0] == '&':
-        return match(seq[1:], pattern[1:])
+        return match(pattern[1:], seq[1:])
     elif seq[0] == pattern[0]:
-        return match(seq[1:], pattern[1:])
+        return match(pattern[1:], seq[1:])
     else:
         return False
 
 
-def search(seq, pattern):
+def search(pattern, seq):
+    """
+    Returns all book-entries in $seq that match $pattern
+    """
     if not seq:
-        return None
-    elif match(seq[0], pattern):
-        print(seq[0])
-    return search(seq[1:], pattern)
+        return []
+    elif match(pattern, seq[0]):
+        return [seq[0]] + search(pattern, seq[1:])
+    else:
+        return [] + search(pattern, seq[1:])
+
+
+
