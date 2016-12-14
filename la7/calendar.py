@@ -148,7 +148,7 @@ def book(cal_name, d, m, t1, t2, subject_text):
 def show(cal_name, d, m):
     "String x Integer x String ->"
     day = new_day(d)
-    mon = new_month(m)
+     mon = new_month(m)
     cal_day = calendar_day(day, calendar_month(mon, fetch_calendar(cal_name)))
     
     new_date(day, mon) 			# Ensure that the date is proper
@@ -184,3 +184,8 @@ def help():
     print( ' show(name, day, month)')
     print( ' save(filename)')
     print( ' load(filename)')
+
+def show_free(calendar_name, day, month, start_time, end_time):
+    calendar = fetch_calendar(calendar_name)
+    print(calendar)
+
