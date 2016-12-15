@@ -249,6 +249,18 @@ def is_time(object):
     "Python-object -> Bool"
     return get_tag(object) == 'time'
 
+def print_time(t):
+    "time -> str"
+    h = strip_tag(get_hour(t))
+    m = strip_tag(get_minute(t))
+    
+    if h < 10:
+        h = "0" + str(h)
+    
+    if m < 10:
+        m = "0" + str(m)
+    
+    return str(h) + ":" + str(m)
 
 # ----- SPAN -----
 def new_time_span(t1, t2):
@@ -504,6 +516,49 @@ def calendar_month(mon, cal_year):
     else:
         return strip_tag(cal_year)[matched_mons[0]][1]
 
+#------TIME_SPANS------
+
+def new_time_spans():
+    " -> time_spans"
+    return attach_tag('time_spans', [])
+
+def is_time_spans(object):
+    "Python-object -> Bool"
+    return get_tag(object) == 'time_spans'
+
+def is_empty_spans(time_spans):
+    "time_spans -> Bool"
+    ensure(time_spans, is_time_spans)
+    return not strip_tag(time_spans)
+
+def insert_span(time_span, time_spans):
+    "time_span x time_spans -> time_spans"
+    ensure(time_span, is_time_span)
+    ensure(time_spans, is_time_spans)
+    
+    spans = strip_tag(time_spans)
+    insert = len(spans)
+    
+    if not insert == 1:
+        for i in range(1, insert):
+            if precedes_or_equals(start_time(time_span), start_time(spans[i])):
+                insert = i
+                break
+        new_spans = spans[:insert] + [time_span] + spans[insert:]
+    else:
+        if precedes_or_equals(start_time(time_span), start_time(spans[0])):
+            new_spans = [time_span] + spans
+        else:
+            new_spans = spans + [time_span]
+
+    return attach_tag('time_spans', new_spans)
+
+def print_time_spans(s):
+    "time_spans -> "
+    for spans in strip_tag(s):
+        st = start_time(spans)
+        et = end_time(spans)
+        print(print_time(st)+"-"+print_time(et))
 
 # =========================================================================
 #  A. Calculations
