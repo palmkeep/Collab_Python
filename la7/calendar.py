@@ -144,6 +144,27 @@ def book(cal_name, d, m, t1, t2, subject_text):
                                           day, mon, start, end, subject))
         print("The appointment has been booked.")
 
+# #!#
+#
+#
+def remove(cal_name, d, m, ts):
+    "String x Integer x String x String ->"
+    day = new_day(d)
+    mon = new_month(m)
+    start = convert_time(ts)
+    cal_day = calendar_day(day, calendar_month(mon, fetch_calendar(cal_name)))
+    
+    new_date(day, mon) # Ensure that the date is proper
+    
+    if is_booked_from(cal_day, start):
+        insert_calendar(cal_name, unbook_appointment(fetch_calendar(cal_name), day, mon, start))
+        print("Appointment removed.")
+    else:
+        print("No appointment booked at that time.")
+#
+#
+#
+
 
 def show(cal_name, d, m):
     "String x Integer x String ->"

@@ -60,3 +60,29 @@ def book_appointment(cal_year, day, mon, start, end, subject):
                    insert_appointment(app, cal_day),
                    calendar_month(mon, cal_year)),
                cal_year)
+
+
+# #!#
+#
+#
+def unbook_appointment(cal_year, day, mon, start):
+    "calendar_year x day x month x time -> calendar_year"
+    cal_day = calendar_day(day, calendar_month(mon, cal_year))
+    app = get_appointment_at(cal_day, start)    # Added to calendar_ADT at l:
+    snipped_day = remove_appointment(app, cal_day)
+    print(snipped_day)
+    if is_empty_calendar_day(snipped_day):
+        return del_calendar_day(snipped_day, mon)
+    else:
+        return insert_calendar_month(
+                    mon,
+                    insert_calendar_day(
+                        day,
+                        snipped_day,
+                        calendar_month(mon, cal_year)),
+                    cal_year)
+
+
+
+
+

@@ -196,7 +196,15 @@ def new_duration(hour, minute):
     # Poorly written code. Rewrite.
     return ('duration', (('hour', hour[1] + minute[1] // 60), ('minute', minute[1] % 60)))
 """
+#!#
+#
+#
 def new_duration(hour, minute):
+    """
+    hour x minute -> duration
+    Returns a duration-object constructed with one hour-object and one minute-object
+    Does "clock-counting" and adds minutes up into hours
+    """
     ensure(hour, is_hour)
     ensure(minute, is_minute)
 
@@ -206,6 +214,10 @@ def new_duration(hour, minute):
     mod_minute = new_minute(int_minute % 60)
 
     return attach_tag('duration', (mod_hour, mod_minute))
+#
+#
+#
+
 
 def is_duration(object):
     "Python object -> Bool"
@@ -279,6 +291,11 @@ def is_time_span(object):
     "Python-object -> Bool"
     return get_tag(object) == 'span'
 
+
+#!#
+#
+# Original functions have been left commented out
+#
 """
 # start_time should be re-written (6A).
 def start_time(ts):
@@ -286,6 +303,10 @@ def start_time(ts):
     return ts[1][0]
 """
 def start_time(ts):
+    """
+    span -> time
+    Returns the start time of a span as a time-object
+    """
     ensure(ts, is_time_span)
     return strip_tag(ts)[0]
 
@@ -296,8 +317,15 @@ def end_time(ts):
     return ts[1][1]
 """
 def end_time(ts):
+    """
+    span -> time
+    Returns the end time of a span as a time-object
+    """
     ensure(ts, is_time_span)
     return strip_tag(ts)[1]
+#
+#
+#
 
 
 #----- DATE -----
@@ -353,6 +381,26 @@ def get_subject(app):
     return strip_tag(app)[1]
 
 
+#!#
+#
+#
+def get_appointment_at(cal_day, start):
+    """
+    Iterates through all the appointments in a day and returns an appointment
+    if it starts at the given time $start
+    """
+    app = first_appointment(cal_day)
+    if not cal_day:
+        return None
+    elif start_time(get_span(app)) == start:
+        return app
+    else:
+        return get_appointment_at(rest_calendar_day(cal_day), start)
+#
+#
+#
+
+
 # ----- CALENDAR_DAY -----
 def new_calendar_day():
     " -> calendar_day"
@@ -385,6 +433,34 @@ def insert_appointment(app, cal_day):
     ensure(cal_day, is_calendar_day)
     
     return attach_tag('calendar_day', add_appointment(strip_tag(cal_day)))
+
+
+# #!#
+#
+#
+def remove_appointment(app, cal_day):
+    """
+    appointment x calendar_day -> calendar_day
+    Constructs and returns a new cal_day without a given appointment
+    """
+
+    def del_appointment(al):
+        "[appointment] -> [appointment]"
+        if not al:
+            return []
+        elif app == al[0]:
+            return del_appointment(al[1:])
+        else:
+            return [al[0]] + del_appointment(al[1:])
+
+    ensure(app, is_appointment)
+    ensure(cal_day, is_calendar_day)
+
+    return attach_tag('calendar_day', del_appointment(strip_tag(cal_day)))
+    
+#
+#
+#
 
 
 def first_appointment(cal_day):
@@ -440,6 +516,26 @@ def insert_calendar_day(day, cal_day, cal_mon):
     
     return attach_tag('calendar_month', update(strip_tag(cal_mon)))
 
+
+# #!#
+#
+#
+def del_calendar_day(cal_day, cal_mon):
+    "calendar_day x calendar_month -> calendar_month"
+
+    def update(dl):
+        "[day] -> [day]"
+        if not dl:
+            return []
+        elif day_number(cal_day) == day_number(new_day(dl[0][0])):
+            return dl[1:]
+        else:
+            return [dl[0]] + update(dl[1:])
+
+    return attach_tag('calendar_month', update(strip_tag(cal_mon)))
+#
+#
+#
 
 def calendar_day(day, cal_mon):
     "day x calendar_month -> calendar_day"
@@ -695,7 +791,6 @@ def are_overlapping(ts1, ts2):
 
 # Calculates the overlapping part of two time spans.
 # This is poorly written, and demands re-implementation (6A).
-
 """
 def overlap(ts1, ts2):
     # Violates abstraction layers (etc).
@@ -707,6 +802,7 @@ def overlap(ts1, ts2):
     return ('span', (('time', (('hour', min1//60), ('minute', min1%60))), ('time', (('hour', min2//60), ('minute', min2%60)))))
 """
 
+<<<<<<< HEAD
 def remove_overlap(ts1, ts2):
     "time span x time span -> time spans"
     time_spans = new_time_spans()
@@ -728,6 +824,12 @@ def remove_overlap(ts1, ts2):
 def split_time(ts1, ts2):
     pass
 
+=======
+
+# #!#
+#
+#
+>>>>>>> c2279b1d291dfc1d27b49f2d1ce3dcc26908ad49
 def overlap(ts1, ts2):
     ensure(ts1, is_time_span)
     ensure(ts2, is_time_span)
@@ -753,6 +855,9 @@ def overlap(ts1, ts2):
     min2 = new_minute(min2 % 60)
 
     return new_time_span(new_time(hour1, min1), new_time(hour2, min2))
+#
+#
+#
 
 
 # =========================================================================
@@ -761,22 +866,10 @@ def overlap(ts1, ts2):
 
 # Transform a span into a duration. That is, merely calculate the length
 # of the span. This should be implemented in 6A.
-"""
 def length_of_span(ts):
     # To rewrite.
     mins = ts[1][1][1][1][1] + ts[1][1][1][0][1]*60 - ts[1][0][1][1][1] - ts[1][0][1][0][1]*60
     return ('duration', (('hour', mins//60), ('minute', mins%60)))
-"""
-def length_of_span(ts):
-    ts_s_h = get_integer(get_hour(start_time(ts)))
-    ts_s_m = get_integer(get_minute(start_time(ts)))
-
-    ts_e_h = get_integer(get_hour(end_time(ts)))
-    ts_e_m = get_integer(get_minute(end_time(ts)))
-
-    mins = ts_e_h*60 + ts_e_m - ts_s_h*60 - ts_s_m
-
-    return new_duration(new_hour(mins // 60), new_minute(mins % 60))
 
 
 # Create a time object corresponding to the input "HH:MM".
@@ -842,3 +935,4 @@ def keep_spans(mts, pred):
                            keep_spans(rest_spans(mts), pred))
     else:
         return keep_spans(rest_spans(mts))
+
