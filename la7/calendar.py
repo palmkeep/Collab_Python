@@ -144,6 +144,17 @@ def book(cal_name, d, m, t1, t2, subject_text):
                                           day, mon, start, end, subject))
         print("The appointment has been booked.")
 
+#
+#
+#
+def remove(cal_name, d, m, start):
+    if ():
+        print("Appointment removed.")
+    else:
+        print("No appointment booked at that time.")
+#
+#
+#
 
 def show(cal_name, d, m):
     "String x Integer x String ->"
