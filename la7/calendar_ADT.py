@@ -457,6 +457,7 @@ def remove_appointment(app, cal_day):
     ensure(cal_day, is_calendar_day)
 
     return attach_tag('calendar_day', del_appointment(strip_tag(cal_day)))
+    
 #
 #
 #
@@ -515,6 +516,26 @@ def insert_calendar_day(day, cal_day, cal_mon):
     
     return attach_tag('calendar_month', update(strip_tag(cal_mon)))
 
+
+# #!#
+#
+#
+def del_calendar_day(cal_day, cal_mon):
+    "calendar_day x calendar_month -> calendar_month"
+
+    def update(dl):
+        "[day] -> [day]"
+        if not dl:
+            return []
+        elif day_number(cal_day) == day_number(new_day(dl[0][0])):
+            return dl[1:]
+        else:
+            return [dl[0]] + update(dl[1:])
+
+    return attach_tag('calendar_month', update(strip_tag(cal_mon)))
+#
+#
+#
 
 def calendar_day(day, cal_mon):
     "day x calendar_month -> calendar_day"

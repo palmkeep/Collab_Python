@@ -144,8 +144,8 @@ def book(cal_name, d, m, t1, t2, subject_text):
                                           day, mon, start, end, subject))
         print("The appointment has been booked.")
 
+# #!#
 #
-#   #Our code#
 #
 def remove(cal_name, d, m, ts):
     "String x Integer x String x String ->"
