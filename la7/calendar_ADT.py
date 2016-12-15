@@ -550,7 +550,6 @@ def insert_span(time_span, time_spans):
             new_spans = [time_span] + spans
         else:
             new_spans = spans + [time_span]
-
     return attach_tag('time_spans', new_spans)
 
 def print_time_spans(s):
@@ -559,6 +558,76 @@ def print_time_spans(s):
         st = start_time(spans)
         et = end_time(spans)
         print(print_time(st)+"-"+print_time(et))
+
+def add_time_spans(ts1, ts2):
+    ensure(ts1, is_time_spans)
+    ensure(ts2, is_time_spans)
+    final_spans=ts1
+    for span in strip_tag(ts2):
+        final_spans = insert_span(span, final_spans)
+    return final_spans
+        
+def insert_time_span_from_appointment(appointment, ts):
+    new_ts = insert_span(get_span(appointment), ts)
+    return new_ts
+
+def insert_all_spans_from_day(day, ts):
+    final_ts = new_time_spans()
+    app1 = first_appointment(day)
+    app_rest = rest_calendar_day(day)
+    final_ts = insert_time_span_from_appointment(app1, final_ts)
+    
+    if strip_tag(app_rest):
+        final_ts = add_time_spans(final_ts, insert_all_spans_from_day(app_rest, final_ts))
+    
+    return final_ts
+
+def remove_span(ts, nr):
+    return_ts = new_time_spans()
+    for i in range(len(strip_tag(ts))):
+        if not i == nr:
+            return_ts = insert_span(strip_tag(ts)[i], return_ts)
+    return return_ts
+
+def first_span(ts):
+    "time spans -> time span"
+    return strip_tag(ts)[0]
+
+def rest_of_spans(ts):
+    "time spans -> time spans"
+    return attach_tag("time_spans", strip_tag(ts)[1:])
+
+def free_spans(ts_range, time_spans):
+    "time span x times spans -> timespans"
+    final_spans = new_time_spans()
+
+    if precedes(start_time(ts_range),start_time(strip_tag(time_spans)[0])):
+        final_spans = insert_span(new_time_span(start_time(ts_range), start_time(strip_tag(time_spans)[0])), final_spans)
+    
+    for i in range(len(strip_tag(time_spans))-1):
+        span1 = strip_tag(time_spans)[i]
+        span2 = strip_tag(time_spans)[i+1]
+        start1 = start_time(span1)
+        end1 = end_time(span1)
+        start2 = start_time(span2)
+        end2 = end_time(span2)
+        
+        if not are_overlapping(span1, span2) and are_overlapping(ts_range, span1) and are_overlapping(ts_range, span2):
+            final_spans = insert_span(new_time_span(end1, start2), final_spans)
+
+    if not precedes(end_time(ts_range),end_time(strip_tag(time_spans)[-1])):
+        final_spans = insert_span(new_time_span(end_time(strip_tag(time_spans)[-1]), end_time(ts_range)), final_spans)
+    
+    
+    
+
+    return final_spans
+            
+        
+    
+            
+            
+            
 
 # =========================================================================
 #  A. Calculations
@@ -637,6 +706,28 @@ def overlap(ts1, ts2):
                 ts2[1][1][1][0][1]*60+ts2[1][1][1][1][1])
     return ('span', (('time', (('hour', min1//60), ('minute', min1%60))), ('time', (('hour', min2//60), ('minute', min2%60)))))
 """
+
+def remove_overlap(ts1, ts2):
+    "time span x time span -> time spans"
+    time_spans = new_time_spans()
+    if are_overlapping(ts1, ts2):
+        time_spans = new_time_spans()
+        ov = overlap(ts1, ts2)
+        if precedes(start_time(ts1), start_time(ts2)):
+            time_spans = insert_span(new_time_span(start_time(ts1), start_time(ts2)), time_spans)
+
+        if precedes(end_time(ts2), end_time(ts1)):
+            time_spans = insert_span(new_time_span(end_time(ts2), end_time(ts1)), time_spans)
+    else:
+        time_spans = insert_span(ts1, time_spans)
+    
+    return time_spans
+           
+    
+
+def split_time(ts1, ts2):
+    pass
+
 def overlap(ts1, ts2):
     ensure(ts1, is_time_span)
     ensure(ts2, is_time_span)
