@@ -182,8 +182,23 @@ def new_cases():
 
     # -------- YOUR TEST CASES GO HERE -----------------------   
     # For each case, add a brief description of what you want to test.
+    new_test_case(
+        2, 
+        "00:00",
+        "23:59",
+        ["06:30-09:00", "13:12-18:12"], 
+        ["00:00-06:30", "09:00-13:12", "18:12-23:59"])
+    
+
+    new_test_case(
+        3, 
+        "13:00",
+        "16:00",
+        ["06:30-09:00", "16:12-18:12"], 
+        ["13:00-16:00"])
     
     
     print("Test cases generated.")
 
 # Run the test cases by calling test_free_spans().
+test_free_spans()

@@ -27,4 +27,4 @@ print("---------------------------------")
 
 ts1= new_time_span(new_time(new_hour(1), new_minute(1)), new_time(new_hour(13), new_minute(50)))
 
-#show_free("Viktor", 12, "jan","","" )
+show_free("Viktor", 12, "jan","00:00","19:30" )

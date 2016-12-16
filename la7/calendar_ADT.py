@@ -622,7 +622,7 @@ def is_time_spans(object):
     "Python-object -> Bool"
     return get_tag(object) == 'time_spans'
 
-def is_empty_spans(time_spans):
+def is_empty_time_spans(time_spans):
     "time_spans -> Bool"
     ensure(time_spans, is_time_spans)
     return not strip_tag(time_spans)
@@ -632,23 +632,15 @@ def insert_span(time_span, time_spans):
     ensure(time_span, is_time_span)
     ensure(time_spans, is_time_spans)
     
-    spans = strip_tag(time_spans)
-    insert = len(spans)
-    
-    if not insert == 1:
-        for i in range(1, insert):
-            if precedes_or_equals(start_time(time_span), start_time(spans[i])):
-                insert = i
-                break
-        new_spans = spans[:insert] + [time_span] + spans[insert:]
-    else:
-        if precedes_or_equals(start_time(time_span), start_time(spans[0])):
-            new_spans = [time_span] + spans
+    def add_span(al):
+        if not al  or precedes(start_time(time_span), start_time(al[0])):
+            return [time_span] + al
         else:
-            new_spans = spans + [time_span]
-    return attach_tag('time_spans', new_spans)
+            return [al[0]] + add_span(al[1:])
+    
+    return attach_tag("time_spans", add_span(strip_tag(time_spans)))
 
-def print_time_spans(s):
+def show_time_spans(s):
     "time_spans -> "
     for spans in strip_tag(s):
         st = start_time(spans)
@@ -656,6 +648,7 @@ def print_time_spans(s):
         print(print_time(st)+"-"+print_time(et))
 
 def add_time_spans(ts1, ts2):
+    "time_spans x time_spans -> time_spans"
     ensure(ts1, is_time_spans)
     ensure(ts2, is_time_spans)
     final_spans=ts1
@@ -664,10 +657,12 @@ def add_time_spans(ts1, ts2):
     return final_spans
         
 def insert_time_span_from_appointment(appointment, ts):
+    "appointment x time_spans -> time_spans"
     new_ts = insert_span(get_span(appointment), ts)
     return new_ts
 
 def insert_all_spans_from_day(day, ts):
+    "calendar_day x time_spans -> time_spans"
     final_ts = new_time_spans()
     app1 = first_appointment(day)
     app_rest = rest_calendar_day(day)
@@ -679,6 +674,7 @@ def insert_all_spans_from_day(day, ts):
     return final_ts
 
 def remove_span(ts, nr):
+    "time_spans x int -> time_spans"
     return_ts = new_time_spans()
     for i in range(len(strip_tag(ts))):
         if not i == nr:
@@ -689,35 +685,37 @@ def first_span(ts):
     "time spans -> time span"
     return strip_tag(ts)[0]
 
-def rest_of_spans(ts):
+def rest_spans(ts):
     "time spans -> time spans"
     return attach_tag("time_spans", strip_tag(ts)[1:])
 
-def free_spans(ts_range, time_spans):
+def free_spans(cal_day, start, end):
     "time span x times spans -> timespans"
+    time_spans = new_time_spans()
+    time_spans= insert_all_spans_from_day(cal_day, time_spans)
+    ts_range = new_time_span(start, end)
     final_spans = new_time_spans()
+    
+    def free_span(ts):
+        if not ts[1:]:
+            return []
+        elif not are_overlapping(ts[0], ts[1]) and are_overlapping(ts[0], ts_range) and are_overlapping(ts[1], ts_range):
+            return [new_time_span(end_time(ts[0]), start_time(ts[1]))] + free_span(ts[1:])
+        else:
+            return free_span(ts[1:])
 
-    if precedes(start_time(ts_range),start_time(strip_tag(time_spans)[0])):
-        final_spans = insert_span(new_time_span(start_time(ts_range), start_time(strip_tag(time_spans)[0])), final_spans)
+    fs = attach_tag("time_spans", free_span(strip_tag(time_spans)))
     
-    for i in range(len(strip_tag(time_spans))-1):
-        span1 = strip_tag(time_spans)[i]
-        span2 = strip_tag(time_spans)[i+1]
-        start1 = start_time(span1)
-        end1 = end_time(span1)
-        start2 = start_time(span2)
-        end2 = end_time(span2)
-        
-        if not are_overlapping(span1, span2) and are_overlapping(ts_range, span1) and are_overlapping(ts_range, span2):
-            final_spans = insert_span(new_time_span(end1, start2), final_spans)
+    if not is_empty_time_spans(fs):
+        if precedes(start_time(ts_range),start_time(strip_tag(time_spans)[0])):
+            fs = insert_span(new_time_span(start_time(ts_range), start_time(strip_tag(time_spans)[0])), fs)
 
-    if not precedes(end_time(ts_range),end_time(strip_tag(time_spans)[-1])):
-        final_spans = insert_span(new_time_span(end_time(strip_tag(time_spans)[-1]), end_time(ts_range)), final_spans)
+        if not precedes(end_time(ts_range),end_time(strip_tag(time_spans)[-1])):
+            fs = insert_span(new_time_span(end_time(strip_tag(time_spans)[-1]), end_time(ts_range)), fs)
+    elif not are_overlapping(first_span(time_spans), ts_range):
+        fs = insert_span(ts_range, fs)
     
-    
-    
-
-    return final_spans
+    return fs
             
         
     
