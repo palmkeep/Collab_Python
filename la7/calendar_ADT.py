@@ -802,7 +802,6 @@ def overlap(ts1, ts2):
     return ('span', (('time', (('hour', min1//60), ('minute', min1%60))), ('time', (('hour', min2//60), ('minute', min2%60)))))
 """
 
-<<<<<<< HEAD
 def remove_overlap(ts1, ts2):
     "time span x time span -> time spans"
     time_spans = new_time_spans()
@@ -824,12 +823,10 @@ def remove_overlap(ts1, ts2):
 def split_time(ts1, ts2):
     pass
 
-=======
-
 # #!#
 #
 #
->>>>>>> c2279b1d291dfc1d27b49f2d1ce3dcc26908ad49
+
 def overlap(ts1, ts2):
     ensure(ts1, is_time_span)
     ensure(ts2, is_time_span)
