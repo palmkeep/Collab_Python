@@ -517,25 +517,60 @@ def insert_calendar_day(day, cal_day, cal_mon):
     return attach_tag('calendar_month', update(strip_tag(cal_mon)))
 
 
+
 # #!#
 #
 #
-def del_calendar_day(cal_day, cal_mon):
-    "calendar_day x calendar_month -> calendar_month"
+def del_calendar_day(day, cal_day, cal_mon):
+    "day x calendar_day x calendar_month -> calendar_month"
 
     def update(dl):
         "[day] -> [day]"
-        if not dl:
-            return []
-        elif day_number(cal_day) == day_number(new_day(dl[0][0])):
+        if not dl or day_number(day) < day_number(new_day(dl[0][0])):
+            return [(strip_tag(day), cal_day)] + dl
+        elif day_number(day) == day_number(new_day(dl[0][0])):
             return dl[1:]
         else:
             return [dl[0]] + update(dl[1:])
 
-    return attach_tag('calendar_month', update(strip_tag(cal_mon)))
+    ensure(day, is_day)
+    ensure(cal_day, is_calendar_day)
+    ensure(cal_mon, is_calendar_month)
+
+    del_day = update(strip_tag(cal_mon))
+    print('del_day', del_day)
+    if not del_day:
+        return []
+    else:
+        return attach_tag('calendar_day', del_day)
+
+def del_calendar_month(mon, cal_mon, cal_year):
+    "month x calendar_month x calendar_year -> calendar_year"
+    
+    def update(ml):
+        "[month] -> [month]"
+        if not ml or month_number(mon) < month_number(new_month(ml[0][0])):
+            return [(strip_tag(mon), cal_mon)] + ml
+        elif month_number(mon) == month_number(new_month(ml[0][0])):
+            return ml[1:]
+        else:
+            return [ml[0]] + update(ml[1:])
+    
+    ensure(mon, is_month)
+    ensure(cal_mon, is_calendar_month)
+    ensure(cal_year, is_calendar_year)
+    
+    if is_empty_calendar_month(cal_mon):
+        return cal_year
+    elif last_booked_day(cal_mon) > number_of_days(mon):
+        raise Exception('Too few days in {0}.'.format(month_name(mon)))
+    else:
+        return attach_tag('calendar_year', update(strip_tag(cal_year)))
+
 #
 #
 #
+
 
 def calendar_day(day, cal_mon):
     "day x calendar_month -> calendar_day"
