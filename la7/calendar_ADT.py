@@ -517,60 +517,25 @@ def insert_calendar_day(day, cal_day, cal_mon):
     return attach_tag('calendar_month', update(strip_tag(cal_mon)))
 
 
-
 # #!#
 #
 #
-def del_calendar_day(day, cal_day, cal_mon):
-    "day x calendar_day x calendar_month -> calendar_month"
+def del_calendar_day(cal_day, cal_mon):
+    "calendar_day x calendar_month -> calendar_month"
 
     def update(dl):
         "[day] -> [day]"
-        if not dl or day_number(day) < day_number(new_day(dl[0][0])):
-            return [(strip_tag(day), cal_day)] + dl
-        elif day_number(day) == day_number(new_day(dl[0][0])):
+        if not dl:
+            return []
+        elif day_number(cal_day) == day_number(new_day(dl[0][0])):
             return dl[1:]
         else:
             return [dl[0]] + update(dl[1:])
 
-    ensure(day, is_day)
-    ensure(cal_day, is_calendar_day)
-    ensure(cal_mon, is_calendar_month)
-
-    del_day = update(strip_tag(cal_mon))
-    print('del_day', del_day)
-    if not del_day:
-        return []
-    else:
-        return attach_tag('calendar_day', del_day)
-
-def del_calendar_month(mon, cal_mon, cal_year):
-    "month x calendar_month x calendar_year -> calendar_year"
-    
-    def update(ml):
-        "[month] -> [month]"
-        if not ml or month_number(mon) < month_number(new_month(ml[0][0])):
-            return [(strip_tag(mon), cal_mon)] + ml
-        elif month_number(mon) == month_number(new_month(ml[0][0])):
-            return ml[1:]
-        else:
-            return [ml[0]] + update(ml[1:])
-    
-    ensure(mon, is_month)
-    ensure(cal_mon, is_calendar_month)
-    ensure(cal_year, is_calendar_year)
-    
-    if is_empty_calendar_month(cal_mon):
-        return cal_year
-    elif last_booked_day(cal_mon) > number_of_days(mon):
-        raise Exception('Too few days in {0}.'.format(month_name(mon)))
-    else:
-        return attach_tag('calendar_year', update(strip_tag(cal_year)))
-
+    return attach_tag('calendar_month', update(strip_tag(cal_mon)))
 #
 #
 #
-
 
 def calendar_day(day, cal_mon):
     "day x calendar_month -> calendar_day"
@@ -657,7 +622,7 @@ def is_time_spans(object):
     "Python-object -> Bool"
     return get_tag(object) == 'time_spans'
 
-def is_empty_spans(time_spans):
+def is_empty_time_spans(time_spans):
     "time_spans -> Bool"
     ensure(time_spans, is_time_spans)
     return not strip_tag(time_spans)
@@ -667,29 +632,96 @@ def insert_span(time_span, time_spans):
     ensure(time_span, is_time_span)
     ensure(time_spans, is_time_spans)
     
-    spans = strip_tag(time_spans)
-    insert = len(spans)
-    
-    if not insert == 1:
-        for i in range(1, insert):
-            if precedes_or_equals(start_time(time_span), start_time(spans[i])):
-                insert = i
-                break
-        new_spans = spans[:insert] + [time_span] + spans[insert:]
-    else:
-        if precedes_or_equals(start_time(time_span), start_time(spans[0])):
-            new_spans = [time_span] + spans
+    def add_span(al):
+        if not al  or precedes(start_time(time_span), start_time(al[0])):
+            return [time_span] + al
         else:
-            new_spans = spans + [time_span]
+            return [al[0]] + add_span(al[1:])
+    
+    return attach_tag("time_spans", add_span(strip_tag(time_spans)))
 
-    return attach_tag('time_spans', new_spans)
-
-def print_time_spans(s):
+def show_time_spans(s):
     "time_spans -> "
     for spans in strip_tag(s):
         st = start_time(spans)
         et = end_time(spans)
         print(print_time(st)+"-"+print_time(et))
+
+def add_time_spans(ts1, ts2):
+    "time_spans x time_spans -> time_spans"
+    ensure(ts1, is_time_spans)
+    ensure(ts2, is_time_spans)
+    final_spans=ts1
+    for span in strip_tag(ts2):
+        final_spans = insert_span(span, final_spans)
+    return final_spans
+        
+def insert_time_span_from_appointment(appointment, ts):
+    "appointment x time_spans -> time_spans"
+    new_ts = insert_span(get_span(appointment), ts)
+    return new_ts
+
+def insert_all_spans_from_day(day, ts):
+    "calendar_day x time_spans -> time_spans"
+    final_ts = new_time_spans()
+    app1 = first_appointment(day)
+    app_rest = rest_calendar_day(day)
+    final_ts = insert_time_span_from_appointment(app1, final_ts)
+    
+    if strip_tag(app_rest):
+        final_ts = add_time_spans(final_ts, insert_all_spans_from_day(app_rest, final_ts))
+    
+    return final_ts
+
+def remove_span(ts, nr):
+    "time_spans x int -> time_spans"
+    return_ts = new_time_spans()
+    for i in range(len(strip_tag(ts))):
+        if not i == nr:
+            return_ts = insert_span(strip_tag(ts)[i], return_ts)
+    return return_ts
+
+def first_span(ts):
+    "time spans -> time span"
+    return strip_tag(ts)[0]
+
+def rest_spans(ts):
+    "time spans -> time spans"
+    return attach_tag("time_spans", strip_tag(ts)[1:])
+
+def free_spans(cal_day, start, end):
+    "time span x times spans -> timespans"
+    time_spans = new_time_spans()
+    time_spans= insert_all_spans_from_day(cal_day, time_spans)
+    ts_range = new_time_span(start, end)
+    final_spans = new_time_spans()
+    
+    def free_span(ts):
+        if not ts[1:]:
+            return []
+        elif not are_overlapping(ts[0], ts[1]) and are_overlapping(ts[0], ts_range) and are_overlapping(ts[1], ts_range):
+            return [new_time_span(end_time(ts[0]), start_time(ts[1]))] + free_span(ts[1:])
+        else:
+            return free_span(ts[1:])
+
+    fs = attach_tag("time_spans", free_span(strip_tag(time_spans)))
+    
+    if not is_empty_time_spans(fs):
+        if precedes(start_time(ts_range),start_time(strip_tag(time_spans)[0])):
+            fs = insert_span(new_time_span(start_time(ts_range), start_time(strip_tag(time_spans)[0])), fs)
+
+        if not precedes(end_time(ts_range),end_time(strip_tag(time_spans)[-1])):
+            fs = insert_span(new_time_span(end_time(strip_tag(time_spans)[-1]), end_time(ts_range)), fs)
+    elif not are_overlapping(first_span(time_spans), ts_range):
+        fs = insert_span(ts_range, fs)
+    
+    return fs
+            
+        
+    
+            
+            
+            
 
 # =========================================================================
 #  A. Calculations
@@ -768,10 +800,31 @@ def overlap(ts1, ts2):
     return ('span', (('time', (('hour', min1//60), ('minute', min1%60))), ('time', (('hour', min2//60), ('minute', min2%60)))))
 """
 
+def remove_overlap(ts1, ts2):
+    "time span x time span -> time spans"
+    time_spans = new_time_spans()
+    if are_overlapping(ts1, ts2):
+        time_spans = new_time_spans()
+        ov = overlap(ts1, ts2)
+        if precedes(start_time(ts1), start_time(ts2)):
+            time_spans = insert_span(new_time_span(start_time(ts1), start_time(ts2)), time_spans)
+
+        if precedes(end_time(ts2), end_time(ts1)):
+            time_spans = insert_span(new_time_span(end_time(ts2), end_time(ts1)), time_spans)
+    else:
+        time_spans = insert_span(ts1, time_spans)
+    
+    return time_spans
+           
+    
+
+def split_time(ts1, ts2):
+    pass
 
 # #!#
 #
 #
+
 def overlap(ts1, ts2):
     ensure(ts1, is_time_span)
     ensure(ts2, is_time_span)

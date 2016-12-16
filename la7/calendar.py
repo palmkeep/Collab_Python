@@ -207,6 +207,12 @@ def help():
     print( ' load(filename)')
 
 def show_free(calendar_name, day, month, start_time, end_time):
+    "str x int x str x str x str ->"
+    month = new_month(month)
+    day = new_day(day)
     calendar = fetch_calendar(calendar_name)
-    print(calendar)
+    ts = new_time_spans()
+    cal_day = calendar_day(day,calendar_month(month,calendar))
+    ts = free_spans(cal_day, convert_time(start_time), convert_time(end_time))
+    show_time_spans(ts)
 
