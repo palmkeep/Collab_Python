@@ -384,6 +384,9 @@ def get_subject(app):
 #!#
 #
 #
+# -----
+# TODO: Komplettering 4
+# ----- 
 def get_appointment_at(cal_day, start):
     """
     Iterates through all the appointments in a day and returns an appointment
@@ -640,6 +643,9 @@ def insert_span(time_span, time_spans):
     
     return attach_tag("time_spans", add_span(strip_tag(time_spans)))
 
+# -----
+# TODO: Komplettering 3
+# -----
 def show_time_spans(s):
     "time_spans -> "
     for spans in strip_tag(s):
@@ -825,6 +831,9 @@ def split_time(ts1, ts2):
 #
 #
 
+# -----
+# TODO: Komplettering 1
+# -----
 def overlap(ts1, ts2):
     ensure(ts1, is_time_span)
     ensure(ts2, is_time_span)
@@ -861,6 +870,9 @@ def overlap(ts1, ts2):
 
 # Transform a span into a duration. That is, merely calculate the length
 # of the span. This should be implemented in 6A.
+# -----
+# TODO: Komplettering
+# -----
 def length_of_span(ts):
     # To rewrite.
     mins = ts[1][1][1][1][1] + ts[1][1][1][0][1]*60 - ts[1][0][1][1][1] - ts[1][0][1][0][1]*60

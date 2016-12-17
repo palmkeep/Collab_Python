@@ -196,6 +196,10 @@ def new_cases():
         "16:00",
         ["06:30-09:00", "16:12-18:12"], 
         ["13:00-16:00"])
+
+# -----
+# TODO: Komplettering 6
+# -----
     
     
     print("Test cases generated.")
