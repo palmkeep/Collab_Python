@@ -387,11 +387,14 @@ def get_subject(app):
 # -----
 # TODO: Komplettering 4
 # ----- 
+"""
+DO NOT USE
+
 def get_appointment_at(cal_day, start):
-    """
-    Iterates through all the appointments in a day and returns an appointment
-    if it starts at the given time $start
-    """
+"""
+    #Iterates through all the appointments in a day and returns an appointment
+    #if it starts at the given time $start
+"""
     app = first_appointment(cal_day)
     if not cal_day:
         return None
@@ -399,6 +402,7 @@ def get_appointment_at(cal_day, start):
         return app
     else:
         return get_appointment_at(rest_calendar_day(cal_day), start)
+"""
 #
 #
 #
@@ -441,22 +445,23 @@ def insert_appointment(app, cal_day):
 # #!#
 #
 #
-def remove_appointment(app, cal_day):
+def remove_appointment(start, cal_day):
     """
     appointment x calendar_day -> calendar_day
-    Constructs and returns a new cal_day without a given appointment
+    Constructs and returns a new cal_day without the given appointment
     """
 
     def del_appointment(al):
         "[appointment] -> [appointment]"
         if not al:
             return []
-        elif app == al[0]:
-            return del_appointment(al[1:])
+        elif start == first_span(get_span(al[0])):
+            return al[1:]
+            #return del_appointment(al[1:])
         else:
             return [al[0]] + del_appointment(al[1:])
 
-    ensure(app, is_appointment)
+    ensure(start, is_time)
     ensure(cal_day, is_calendar_day)
 
     return attach_tag('calendar_day', del_appointment(strip_tag(cal_day)))

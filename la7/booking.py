@@ -72,33 +72,14 @@ def unbook_appointment(cal_year, day, mon, start):
     "calendar_year x day x month x time -> calendar_year"
     cal_day = calendar_day(day, calendar_month(mon, cal_year))
     cal_mon = calendar_month(mon, cal_year)
-    app = get_appointment_at(cal_day, start)
-    snipped_day = remove_appointment(app, cal_day)
-    print('sd', snipped_day)
-    if snipped_day[1] == []:
-        snipped_month = del_calendar_day(day, snipped_day, cal_mon)
-        print('sm', snipped_month)
-        if snipped_month == []:
-            print(1.1)
-            print(mon)
-            return insert_calendar_month(
-                        mon,
-                        ('calendar_month',[]),
-                        cal_year)
-        else:
-            return insert_calendar_month(
-                        mon,
-                        snipped_month,
-                        cal_year)
-    else:
-        return insert_calendar_month(
-                    mon,
-                    del_calendar_day(
-                        day,
-                        snipped_day,
-                        calendar_month(mon, cal_year)),
-                    cal_year)
-        
+    # get the hour and minute of $start and increment to create $end
+    return insert_calendar_month(
+                mon,
+                insert_calendar_day(
+                    day,
+                    remove_appointment(start, cal_day),
+                    calendar_month(mon, cal_year)),
+                cal_year)
 #
 #
 #
