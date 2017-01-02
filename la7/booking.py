@@ -53,18 +53,19 @@ def free_spans(cal_day, start, end):
         else:
             return free_span(ts[1:])
 
-    fs = attach_tag("time_spans", free_span(strip_tag(time_spans)))
+    for span in free_span(strip_tag(time_spans)):
+        final_spans = insert_span(span, final_spans)
     
     if precedes(start_time(ts_range),start_time(first_span(time_spans))):
-        fs = insert_span(new_time_span(start_time(ts_range), start_time(first_span(time_spans))), fs)
+        final_spans = insert_span(new_time_span(start_time(ts_range), start_time(first_span(time_spans))), final_spans)
 
     if not precedes(end_time(ts_range),end_time(last_span(time_spans))):
-        fs = insert_span(new_time_span(end_time(last_span(time_spans)), end_time(ts_range)), fs)
+        final_spans = insert_span(new_time_span(end_time(last_span(time_spans)), end_time(ts_range)), final_spans)
 
-    if not are_overlapping(first_span(time_spans), ts_range) and is_empty_time_spans(fs):
-        fs = insert_span(ts_range, fs)
-    
-    return fs
+    if not are_overlapping(first_span(time_spans), ts_range) and is_empty_time_spans(final_spans):
+        final_spans = insert_span(ts_range, final_spans)
+   
+    return final_spans
 
 
 # =========================================================================

@@ -653,11 +653,9 @@ def insert_span(time_span, time_spans):
 # -----
 def show_time_spans(s):
     "time_spans -> "
-    for spans in strip_tag(s):
-        st = start_time(spans)
-        et = end_time(spans)
-        print(print_time(st)+"-"+print_time(et))
-
+    print_fn = lambda spans: print(print_time(start_time(spans))+"-"+print_time(end_time(spans)))
+    for_each_span(s, print_fn)
+    
 def add_time_spans(ts1, ts2):
     "time_spans x time_spans -> time_spans"
     ensure(ts1, is_time_spans)
@@ -692,6 +690,7 @@ def remove_span(ts, nr):
             return_ts = insert_span(strip_tag(ts)[i], return_ts)
     return return_ts
 
+ 
 def first_span(ts):
     "time spans -> time span"
     return strip_tag(ts)[0]
@@ -703,7 +702,14 @@ def last_span(ts):
 def rest_spans(ts):
     "time spans -> time spans"
     return attach_tag("time_spans", strip_tag(ts)[1:])
-                 
+
+def number_of_spans(ts):
+    "time spans -> int"
+    return len(strip_tag(ts))
+
+def is_empty(ts):
+    "ts -> bool"
+    return strip_tag(ts) == []
 
 # =========================================================================
 #  A. Calculations
@@ -876,6 +882,14 @@ def convert_duration(s):
 # Below are some useful functions for sequentially performing an operation
 # on each part of a compound data type (eg printing each day in a 
 # calendar_month).
+
+def for_each_span(time_spans, spn_fn):
+    "calendar_year x (time_span ->) ->"
+    if is_empty(rest_spans(time_spans)):
+        spn_fn(first_span(time_spans))
+    else:
+        spn_fn(first_span(time_spans))
+        for_each_span(rest_spans(time_spans), spn_fn)
 
 def for_each_month(cal_year, month_fn):
     "calendar_year x (calendar_month ->) ->"
