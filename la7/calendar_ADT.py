@@ -820,27 +820,18 @@ def overlap(ts1, ts2):
     ensure(ts1, is_time_span)
     ensure(ts2, is_time_span)
 
-    ts1_s_h = get_integer(get_hour(start_time(ts1)))
-    ts1_s_m = get_integer(get_minute(start_time(ts1)))
+    if precedes(start_time(ts1), start_time(ts2)):
+        start = start_time(ts2)
+    else:
+        start = start_time(ts1)
 
-    ts1_e_h = get_integer(get_hour(end_time(ts1)))
-    ts1_e_m = get_integer(get_minute(end_time(ts1)))
-
-    ts2_s_h = get_integer(get_hour(start_time(ts2)))
-    ts2_s_m = get_integer(get_minute(start_time(ts2)))
-
-    ts2_e_h = get_integer(get_hour(end_time(ts2)))
-    ts2_e_m = get_integer(get_minute(end_time(ts2)))
     
-    min1 = max(ts1_s_h*60 + ts1_s_m, ts2_s_h*60 + ts2_s_m)
-    hour1 = new_hour(min1 // 60)
-    min1 = new_minute(min1 % 60)
+    if precedes(end_time(ts1), end_time(ts2)):
+        end = end_time(ts1)
+    else:
+        end = end_time(ts2)
 
-    min2 = min(ts1_e_h*60 + ts1_e_m, ts2_e_h*60 + ts2_e_m)
-    hour2 = new_hour(min2 // 60)
-    min2 = new_minute(min2 % 60)
-
-    return new_time_span(new_time(hour1, min1), new_time(hour2, min2))
+    return new_time_span(start, end)
 #
 #
 #
