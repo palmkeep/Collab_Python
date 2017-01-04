@@ -878,10 +878,18 @@ def overlap(ts1, ts2):
 # -----
 # TODO: Komplettering
 # -----
+"""
 def length_of_span(ts):
     # To rewrite.
     mins = ts[1][1][1][1][1] + ts[1][1][1][0][1]*60 - ts[1][0][1][1][1] - ts[1][0][1][0][1]*60
     return ('duration', (('hour', mins//60), ('minute', mins%60)))
+"""
+def length_of_span(ts):
+    st = start_time(ts)
+    et = end_time(ts)
+
+    mins = get_integer(get_hour(et))*60 - get_integer(get_hour(st))*60 + get_integer(get_minute(et)) - get_integer(get_minute(st))
+    return new_duration(new_hour(0), new_minute(mins))
 
 
 # Create a time object corresponding to the input "HH:MM".
