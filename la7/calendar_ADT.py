@@ -653,11 +653,9 @@ def insert_span(time_span, time_spans):
 # -----
 def show_time_spans(s):
     "time_spans -> "
-    for spans in strip_tag(s):
-        st = start_time(spans)
-        et = end_time(spans)
-        print(print_time(st)+"-"+print_time(et))
-
+    print_fn = lambda spans: print(print_time(start_time(spans))+"-"+print_time(end_time(spans)))
+    for_each_span(s, print_fn)
+    
 def add_time_spans(ts1, ts2):
     "time_spans x time_spans -> time_spans"
     ensure(ts1, is_time_spans)
@@ -692,47 +690,26 @@ def remove_span(ts, nr):
             return_ts = insert_span(strip_tag(ts)[i], return_ts)
     return return_ts
 
+ 
 def first_span(ts):
     "time spans -> time span"
     return strip_tag(ts)[0]
 
+def last_span(ts):
+    "time spans -> time span"
+    return strip_tag(ts)[-1]
+    
 def rest_spans(ts):
     "time spans -> time spans"
     return attach_tag("time_spans", strip_tag(ts)[1:])
 
-def free_spans(cal_day, start, end):
-    "time span x times spans -> timespans"
-    time_spans = new_time_spans()
-    time_spans= insert_all_spans_from_day(cal_day, time_spans)
-    ts_range = new_time_span(start, end)
-    final_spans = new_time_spans()
-    
-    def free_span(ts):
-        if not ts[1:]:
-            return []
-        elif not are_overlapping(ts[0], ts[1]) and are_overlapping(ts[0], ts_range) and are_overlapping(ts[1], ts_range):
-            return [new_time_span(end_time(ts[0]), start_time(ts[1]))] + free_span(ts[1:])
-        else:
-            return free_span(ts[1:])
+def number_of_spans(ts):
+    "time spans -> int"
+    return len(strip_tag(ts))
 
-    fs = attach_tag("time_spans", free_span(strip_tag(time_spans)))
-    
-    if not is_empty_time_spans(fs):
-        if precedes(start_time(ts_range),start_time(strip_tag(time_spans)[0])):
-            fs = insert_span(new_time_span(start_time(ts_range), start_time(strip_tag(time_spans)[0])), fs)
-
-        if not precedes(end_time(ts_range),end_time(strip_tag(time_spans)[-1])):
-            fs = insert_span(new_time_span(end_time(strip_tag(time_spans)[-1]), end_time(ts_range)), fs)
-    elif not are_overlapping(first_span(time_spans), ts_range):
-        fs = insert_span(ts_range, fs)
-    
-    return fs
-            
-        
-    
-            
-            
-            
+def is_empty(ts):
+    "ts -> bool"
+    return strip_tag(ts) == []
 
 # =========================================================================
 #  A. Calculations
@@ -843,27 +820,18 @@ def overlap(ts1, ts2):
     ensure(ts1, is_time_span)
     ensure(ts2, is_time_span)
 
-    ts1_s_h = get_integer(get_hour(start_time(ts1)))
-    ts1_s_m = get_integer(get_minute(start_time(ts1)))
+    if precedes(start_time(ts1), start_time(ts2)):
+        start = start_time(ts2)
+    else:
+        start = start_time(ts1)
 
-    ts1_e_h = get_integer(get_hour(end_time(ts1)))
-    ts1_e_m = get_integer(get_minute(end_time(ts1)))
-
-    ts2_s_h = get_integer(get_hour(start_time(ts2)))
-    ts2_s_m = get_integer(get_minute(start_time(ts2)))
-
-    ts2_e_h = get_integer(get_hour(end_time(ts2)))
-    ts2_e_m = get_integer(get_minute(end_time(ts2)))
     
-    min1 = max(ts1_s_h*60 + ts1_s_m, ts2_s_h*60 + ts2_s_m)
-    hour1 = new_hour(min1 // 60)
-    min1 = new_minute(min1 % 60)
+    if precedes(end_time(ts1), end_time(ts2)):
+        end = end_time(ts1)
+    else:
+        end = end_time(ts2)
 
-    min2 = min(ts1_e_h*60 + ts1_e_m, ts2_e_h*60 + ts2_e_m)
-    hour2 = new_hour(min2 // 60)
-    min2 = new_minute(min2 % 60)
-
-    return new_time_span(new_time(hour1, min1), new_time(hour2, min2))
+    return new_time_span(start, end)
 #
 #
 #
@@ -913,6 +881,14 @@ def convert_duration(s):
 # Below are some useful functions for sequentially performing an operation
 # on each part of a compound data type (eg printing each day in a 
 # calendar_month).
+
+def for_each_span(time_spans, spn_fn):
+    "calendar_year x (time_span ->) ->"
+    if is_empty(rest_spans(time_spans)):
+        spn_fn(first_span(time_spans))
+    else:
+        spn_fn(first_span(time_spans))
+        for_each_span(rest_spans(time_spans), spn_fn)
 
 def for_each_month(cal_year, month_fn):
     "calendar_year x (calendar_month ->) ->"

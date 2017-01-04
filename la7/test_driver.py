@@ -182,6 +182,8 @@ def new_cases():
 
     # -------- YOUR TEST CASES GO HERE -----------------------   
     # For each case, add a brief description of what you want to test.
+
+    # if you have a couple, non-overlaping appointments scattered whitin the search interval.
     new_test_case(
         2, 
         "00:00",
@@ -189,13 +191,38 @@ def new_cases():
         ["06:30-09:00", "13:12-18:12"], 
         ["00:00-06:30", "09:00-13:12", "18:12-23:59"])
     
-
+    #if you only have appointments that are outside the search intervall
     new_test_case(
         3, 
         "13:00",
         "16:00",
         ["06:30-09:00", "16:12-18:12"], 
         ["13:00-16:00"])
+
+    #if you only have appointments that are partially outside the search intervall
+    new_test_case(
+        4, 
+        "13:00",
+        "16:00",
+        ["06:30-13:30", "15:24-17:00"], 
+        ["13:30-15:24"])
+
+    #if you have overlapping appointments
+    new_test_case(
+        5, 
+        "09:00",
+        "18:00",
+        ["10:00-15:00", "14:30-17:00"], 
+        ["09:00-10:00", "17:00-18:00"])
+
+    #mixed complex set of differing appointments
+    new_test_case(
+        6, 
+        "01:00",
+        "23:00",
+        ["01:00-02:00", "02:10-06:20", "05:00-07:00", "08:00-15:23", "15:50-22:00"], 
+        ["02:00-02:10", "07:00-08:00", "15:23-15:50", "22:00-23:00"])
+
 
 # -----
 # TODO: Komplettering 6

@@ -38,6 +38,49 @@ def is_booked_from(cal_day, t):
        lambda app: is_same_time(t, start_time(get_span(app))))
 
 
+def free_spans(cal_day, start, end):
+    "time span x times spans -> timespans"
+    time_spans = new_time_spans()
+    time_spans= insert_all_spans_from_day(cal_day, time_spans)
+    ts_range = new_time_span(start, end)
+    final_spans = new_time_spans()
+    q = 1
+
+    """
+    def free_span(ts):
+        if not ts[1:]:#is_empty(rest_spans(ts))
+            return [] #new_ts
+        elif not are_overlapping(ts[0], ts[1]) and are_overlapping(ts[0], ts_range) and are_overlapping(ts[1], ts_range):
+            return [new_time_span(end_time(ts[0]), start_time(ts[1]))] + free_span(ts[1:])
+        else:
+            return free_span(ts[1:])
+    """
+    
+    def free_span(ts):
+        if is_empty_time_spans(rest_spans(ts)):
+            return []
+        elif not are_overlapping(first_span(ts), first_span(rest_spans(ts))) and are_overlapping(first_span(ts), ts_range) and are_overlapping(first_span(rest_spans(ts)), ts_range):
+            return [new_time_span(end_time(first_span(ts)), start_time(first_span(rest_spans(ts))))] + free_span(rest_spans(ts))
+        else:
+            return free_span(rest_spans(ts))
+
+    
+    for span in free_span(time_spans):
+        final_spans = insert_span(span, final_spans)
+        
+    
+    if precedes(start_time(ts_range),start_time(first_span(time_spans))):
+        final_spans = insert_span(new_time_span(start_time(ts_range), start_time(first_span(time_spans))), final_spans)
+
+    if not precedes(end_time(ts_range),end_time(last_span(time_spans))):
+        final_spans = insert_span(new_time_span(end_time(last_span(time_spans)), end_time(ts_range)), final_spans)
+
+    if not are_overlapping(first_span(time_spans), ts_range) and is_empty_time_spans(final_spans):
+        final_spans = insert_span(ts_range, final_spans)
+   
+    return final_spans
+
+
 # =========================================================================
 #  2. Making and removing appointments
 # =========================================================================
