@@ -388,13 +388,13 @@ def get_subject(app):
 # TODO: Komplettering 4
 # ----- 
 """
-DO NOT USE
+'Removed', this function is no longer used. Left it so that it is easy to
+check TODO's.
 
 def get_appointment_at(cal_day, start):
-"""
     #Iterates through all the appointments in a day and returns an appointment
     #if it starts at the given time $start
-"""
+
     app = first_appointment(cal_day)
     if not cal_day:
         return None
