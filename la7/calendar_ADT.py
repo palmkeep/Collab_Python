@@ -384,9 +384,6 @@ def get_subject(app):
 #!#
 #
 #
-# -----
-# TODO: Komplettering 4
-# ----- 
 """
 'Removed', this function is no longer used. Left it so that it is easy to
 check TODO's.
@@ -649,7 +646,7 @@ def insert_span(time_span, time_spans):
     return attach_tag("time_spans", add_span(strip_tag(time_spans)))
 
 # -----
-# TODO: Komplettering 3
+# TODO: Komplettering 2
 # -----
 def show_time_spans(s):
     "time_spans -> "
@@ -787,6 +784,27 @@ def overlap(ts1, ts2):
                 ts2[1][1][1][0][1]*60+ts2[1][1][1][1][1])
     return ('span', (('time', (('hour', min1//60), ('minute', min1%60))), ('time', (('hour', min2//60), ('minute', min2%60)))))
 """
+# #!#
+#
+#
+
+def overlap(ts1, ts2):
+    ensure(ts1, is_time_span)
+    ensure(ts2, is_time_span)
+
+    if precedes(start_time(ts1), start_time(ts2)):
+        start = start_time(ts2)
+    else:
+        start = start_time(ts1)
+
+    
+    if precedes(end_time(ts1), end_time(ts2)):
+        end = end_time(ts1)
+    else:
+        end = end_time(ts2)
+
+    return new_time_span(start, end)
+
 
 def remove_overlap(ts1, ts2):
     "time span x time span -> time spans"
@@ -804,34 +822,10 @@ def remove_overlap(ts1, ts2):
     
     return time_spans
            
-    
 
 def split_time(ts1, ts2):
     pass
 
-# #!#
-#
-#
-
-# -----
-# TODO: Komplettering 1
-# -----
-def overlap(ts1, ts2):
-    ensure(ts1, is_time_span)
-    ensure(ts2, is_time_span)
-
-    if precedes(start_time(ts1), start_time(ts2)):
-        start = start_time(ts2)
-    else:
-        start = start_time(ts1)
-
-    
-    if precedes(end_time(ts1), end_time(ts2)):
-        end = end_time(ts1)
-    else:
-        end = end_time(ts2)
-
-    return new_time_span(start, end)
 #
 #
 #
@@ -844,7 +838,11 @@ def overlap(ts1, ts2):
 # Transform a span into a duration. That is, merely calculate the length
 # of the span. This should be implemented in 6A.
 # -----
-# TODO: Komplettering
+# TODO: Komplettering 1
+# Comment:  Earlier length_of_span() let new_duration() take care of the 
+#           calculations that converted $mins => 60 into hours and minutes.
+#           We have now added those calculations into the length_of_span()
+#           function.
 # -----
 """
 def length_of_span(ts):
@@ -853,11 +851,14 @@ def length_of_span(ts):
     return ('duration', (('hour', mins//60), ('minute', mins%60)))
 """
 def length_of_span(ts):
+    "time_span -> duration"
     st = start_time(ts)
     et = end_time(ts)
 
     mins = get_integer(get_hour(et))*60 - get_integer(get_hour(st))*60 + get_integer(get_minute(et)) - get_integer(get_minute(st))
-    return new_duration(new_hour(0), new_minute(mins))
+    hours = mins // 60
+    mins = mins % 60
+    return new_duration(new_hour(hours), new_minute(mins))
 
 
 # Create a time object corresponding to the input "HH:MM".
