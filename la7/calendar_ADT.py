@@ -385,7 +385,8 @@ def get_subject(app):
 #
 #
 """
-'Removed', this function is no longer used. Left it so that it is easy to
+'Removed' 
+This function is no longer used. Left it so that it is easy to
 check TODO's.
 
 def get_appointment_at(cal_day, start):
@@ -526,7 +527,12 @@ def insert_calendar_day(day, cal_day, cal_mon):
 #
 #
 def del_calendar_day(cal_day, cal_mon):
-    "calendar_day x calendar_month -> calendar_month"
+    """
+    calendar_day x calendar_month -> calendar_month
+    
+    Removes $cal_day from $cal_mon and returns $cal_mon as a calender_month
+    object.
+    """
 
     def update(dl):
         "[day] -> [day]"
@@ -789,6 +795,12 @@ def overlap(ts1, ts2):
 #
 
 def overlap(ts1, ts2):
+    """
+    time_span x time_span -> time_span
+
+    Calculates the overlapping part of two time_span objects and
+    returns the overlapping part as a new time_span
+    """
     ensure(ts1, is_time_span)
     ensure(ts2, is_time_span)
 
