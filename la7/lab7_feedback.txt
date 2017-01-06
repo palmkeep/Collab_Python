@@ -1,18 +1,15 @@
 Jag har kommenterat #TODO i er fil på de områden som bör kompletteras och markerat med en siffra för att koppla med siffran i detta dokument. Behåll kompletteringskommentarerna s.a. jag vet var jag ska kolla när ni lämnar in kompletteringen. 
 
-Vad som var bra:
-- Alla funktioner som hör till calendar.py se jättebra ut, så jag har flyttat dem till "ok"-mappen. 
-- I många fall hanterar ni abstraktionen väl.
-- Det är ett stort plus att ni kommenterat och angett typspecifikationer.
+Vad som kan tänkas i framtiden:
+- 'overlap' kan använda sig av 'start_time' och 'end_time' istället.
 
 Vad som bör kompletteras:
 7A:
-- Komplettering 1: Abstraktionsbrott. Ni får inte använda max- och min-funktionerna. I 'calendar_ADT.py' finns det andra funktioner som kan få ut tidigaste och senaste tiden.
-- Komplettering 2: Se till att 'length_of_span' inte bryter abstraktionen.
+- Komplettering 1: Ni ska fortfarande ange antalet timmar om antalet minuter överstiger 59.
 7B:
-- Komplettering 3: Abstraktionsbrott. Jag skulle avråda från att använda generella for-loopar och att använda 'strip_tag'. Vilka andra funktioner har ni som plockar ut 'time_span' utan att bryta mot abstraktionen? Ni ska inte heller behöver ta ut start- och sluttiden och skriva ut det. Vilka andra 'print'-funktioner kan fixa det? "time_spans" innehåller flera "time_span". Hur printar den befintliga koden ett "time_span"? Denna borde dessutom ligga i 'output.py' eftersom att det är där all form av utskrift används. Ett tips är att kolla på hur 'output.py' fungerar.
-7C:
-- Komplettering 4: 'get_appointment_at' kan returnera None, vilket inte är en snygg lösning på uppgiften. Ni ska heller inte behöva använda er av den funktionen, utan jag rekommenderar att utnyttja 'remove_appointment' hela vägen ut. Det sker lite abstraktionsbrott när ni utför jämförelser som 'if snipped_day[1] == []' och 'if snipped_month[1] == []'. Ni ska inte behöva använda er av 'snipped_month' och 'snipped_day'. Använd er av 'insert_calendar_month' med 'remove_appointment' utan de nämnda if-satserna. 'remove_appointment' kommer att fixa resten. 
+- Komplettering 2: Abstraktionsbrott. Istället för att printa direkt finns det hjälpfunktioner (som vi gett er) som skriver ut ett "time_span". Kolla 'output.py' för inspiration på hur olika utskrifter är implementerade. Hur printar den kod vi gett er ett "time_span"? Hur printar den kod vi gett er flera "appointment" i en "calendar_day"? 'show_time_spans' borde även ligga i 'output.py' där all form av utskrift används.
 7D:
-- Komplettering 5: Eftersom att 'free_spans' egentligen borde ligga i 'booking.py' sker det abstraktionsbrott i funktionen. Ni ska därmed inte använda er av 'attach_tag' eller 'strip_tag'. Endast primitiver och initialisering, getters och bekräftelser av 'compound types' är tillåtna till att använda 'tag'-funktionerna. Att använda sådana funktioner på högre nivåer gör det svårt för mig att tolka vad 'start_time(strip_tag(time_spans)[0])' och 'end_time(strip_tag(time_spans)[-1])' är för något. Finns det något annat sätt att få tag på dessa utan att direktindexera en strip_tag?
-- Komplettering 6: Jag skulle gärna vilja se lite fler testfall. Kanske 4-6 lämpliga fall som kolar olika "situationer". Kommentera sedan vilka "situationer" ni kollar.
+- Komplettering 3: Abstraktionsbrott. Ni får inte manipulera listor direkt. Ni har en struktur sedan innan som hanterar samlingar av "time_span", nämligen "time_spans". Se till att utnyttja de funktioner ni implementerat för "time_spans" för att inte bryta mot abstraktionen.
+- Komplettering 4: Se till att kolla på programmeringspraxis angående antalet tecken per rad. Vissa rader i 'free_span' är lite väl långa. Det finns en rad som är nästan 200 tecken lång och den är okommenterad. Det blir svårare för mig att förstå koden.
+- Komplettering 5: Jag saknar er 'test_driver.py'. 
+- Komplettering 6: Se till att alla funktioner är kommenetade, antingen som de kommentarer ni vanligtvis är vana vid eller som typspecifikationer.
