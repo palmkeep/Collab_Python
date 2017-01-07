@@ -37,7 +37,9 @@ def is_booked_from(cal_day, t):
        cal_day,
        lambda app: is_same_time(t, start_time(get_span(app))))
 
-
+# -----
+# TODO: Komplettering 3 & 4
+# -----
 def free_spans(cal_day, start, end):
     "time span x times spans -> timespans"
     time_spans = new_time_spans()
