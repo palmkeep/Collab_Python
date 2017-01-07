@@ -60,6 +60,17 @@ def show_span(ts):
     print('-', end='')
     show_time(end_time(ts))
 
+#!#
+# Comment: Fix for 'komp 2'
+def show_time_spans(tss):
+    "time_spans -> "
+    def show_time_spans_internal(span):
+        show_span(span)
+        print()
+    if strip_tag(tss): 
+        for_each_span(tss, show_time_spans_internal)
+#
+
 
 def show_date(d):
     "date ->"
