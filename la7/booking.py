@@ -50,9 +50,10 @@ def free_spans(cal_day, start, end):
         "time_spans x time_spans -> time_spans"
         if is_empty_time_spans(rest_spans(ts)):
             return fts
-        elif not are_overlapping(first_span(ts), first_span(rest_spans(ts))) \
-                and are_overlapping(first_span(ts), ts_range) \
-                and are_overlapping(first_span(rest_spans(ts)), ts_range): 
+        elif (  not are_overlapping(first_span(ts), first_span(rest_spans(ts)))
+                and are_overlapping(first_span(ts), ts_range)
+                and are_overlapping(first_span(rest_spans(ts)), ts_range)
+                ): 
             # Checks so that the first two spans in $ts are not overlapping
             # and that they are both atleast partially inside $ts_range
 
