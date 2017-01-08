@@ -46,7 +46,6 @@ def free_spans(cal_day, start, end):
     time_spans= insert_all_spans_from_day(cal_day, time_spans)
     ts_range = new_time_span(start, end)
     final_spans = new_time_spans()
-    q = 1
 
     """
     def free_span(ts):
@@ -58,16 +57,26 @@ def free_spans(cal_day, start, end):
             return free_span(ts[1:])
     """
     
-    def free_span(ts):
+    def free_span(ts, fts):
+        "Comment goes here"
         if is_empty_time_spans(rest_spans(ts)):
-            return []
+            return fts
         elif not are_overlapping(first_span(ts), first_span(rest_spans(ts))) and are_overlapping(first_span(ts), ts_range) and are_overlapping(first_span(rest_spans(ts)), ts_range):
-            return [new_time_span(end_time(first_span(ts)), start_time(first_span(rest_spans(ts))))] + free_span(rest_spans(ts))
+            st = end_time(first_span(ts))
+            et = start_time(first_span(rest_spans(ts)))
+            timespan = new_time_span(st, et)
+            print(timespan)
+            ensure(timespan, is_time_span)
+            fts = insert_span(timespan, fts)
+            return free_span(rest_spans(ts), fts)
         else:
-            return free_span(rest_spans(ts))
+            return free_span(rest_spans(ts), fts)
 
-    
-    for span in free_span(time_spans):
+    #!#!#   Vet inte om vi tillåts att strip'a bort tagen i booking.py :/
+    #       Kommer du på något bra sätt att komma runt detta
+    #       Koden ovanför är i princip din kod men istället för att direkt
+    #       skapa en lista med spans så använder den sig av tim_spans grejerna
+    for span in strip_tag(free_span(time_spans, final_spans)):
         final_spans = insert_span(span, final_spans)
         
     
@@ -112,6 +121,8 @@ def book_appointment(cal_year, day, mon, start, end, subject):
 #
 # -----
 # TODO: Komplettering 4
+# Comment:  Believe this might be a leftover from previous komp. since the
+#           longest row here is at 62 characters.
 # -----
 def unbook_appointment(cal_year, day, mon, start):
     "calendar_year x day x month x time -> calendar_year"
