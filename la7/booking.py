@@ -58,10 +58,14 @@ def free_spans(cal_day, start, end):
     """
     
     def free_span(ts, fts):
-        "Comment goes here"
+        "time_spans x time_spans -> time_spans"
         if is_empty_time_spans(rest_spans(ts)):
             return fts
-        elif not are_overlapping(first_span(ts), first_span(rest_spans(ts))) and are_overlapping(first_span(ts), ts_range) and are_overlapping(first_span(rest_spans(ts)), ts_range):
+        elif not are_overlapping(first_span(ts), first_span(rest_spans(ts))) and are_overlapping(first_span(ts), ts_range) and are_overlapping(first_span(rest_spans(ts)), ts_range): 
+            #Checks if the first time_span in ts is not overlapping with 
+            #the first time_span in the rest of ts and that the first 
+            #and second span in ts are overlapping with ts_range
+
             st = end_time(first_span(ts))
             et = start_time(first_span(rest_spans(ts)))
             timespan = new_time_span(st, et)
