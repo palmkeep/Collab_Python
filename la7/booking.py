@@ -62,9 +62,9 @@ def free_spans(cal_day, start, end):
         if is_empty_time_spans(rest_spans(ts)):
             return fts
         elif not are_overlapping(first_span(ts), first_span(rest_spans(ts))) and are_overlapping(first_span(ts), ts_range) and are_overlapping(first_span(rest_spans(ts)), ts_range): 
-            #Checks if the first time_span in ts is not overlapping with 
-            #the first time_span in the rest of ts and that the first 
-            #and second span in ts are overlapping with ts_range
+            # Checks if the first time_span in ts is not overlapping with 
+            # the first time_span in the rest of ts and that the first 
+            # and second span in ts are overlapping with ts_range
 
             st = end_time(first_span(ts))
             et = start_time(first_span(rest_spans(ts)))
@@ -75,11 +75,6 @@ def free_spans(cal_day, start, end):
         else:
             return free_span(rest_spans(ts), fts)
 
-    #!#!#   Vet inte om vi tillåts att strip'a bort tagen i booking.py :/
-    #       Kommer du på något bra sätt att komma runt detta
-    #       Koden ovanför är i princip din kod men istället för att direkt
-    #       skapa en lista med spans så använder den sig av tim_spans grejerna
-    
     final_spans = free_span(time_spans, final_spans)
 
     #
