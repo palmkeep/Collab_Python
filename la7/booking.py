@@ -42,46 +42,32 @@ def is_booked_from(cal_day, t):
 # -----
 def free_spans(cal_day, start, end):
     "time span x times spans -> timespans"
-    time_spans = new_time_spans()
-    time_spans= insert_all_spans_from_day(cal_day, time_spans)
+    time_spans = insert_all_spans_from_day(cal_day, new_time_spans())
     ts_range = new_time_span(start, end)
     final_spans = new_time_spans()
 
-    """
-    def free_span(ts):
-        if not ts[1:]:#is_empty(rest_spans(ts))
-            return [] #new_ts
-        elif not are_overlapping(ts[0], ts[1]) and are_overlapping(ts[0], ts_range) and are_overlapping(ts[1], ts_range):
-            return [new_time_span(end_time(ts[0]), start_time(ts[1]))] + free_span(ts[1:])
-        else:
-            return free_span(ts[1:])
-    """
-    
     def free_span(ts, fts):
         "time_spans x time_spans -> time_spans"
         if is_empty_time_spans(rest_spans(ts)):
             return fts
-        elif not are_overlapping(first_span(ts), first_span(rest_spans(ts))) and are_overlapping(first_span(ts), ts_range) and are_overlapping(first_span(rest_spans(ts)), ts_range): 
-            # Checks if the first time_span in ts is not overlapping with 
-            # the first time_span in the rest of ts and that the first 
-            # and second span in ts are overlapping with ts_range
+        elif not are_overlapping(first_span(ts), first_span(rest_spans(ts))) \
+                and are_overlapping(first_span(ts), ts_range) \
+                and are_overlapping(first_span(rest_spans(ts)), ts_range): 
+            # Checks so that the first two spans in $ts are not overlapping
+            # and that they are both atleast partially inside $ts_range
 
             st = end_time(first_span(ts))
             et = start_time(first_span(rest_spans(ts)))
             timespan = new_time_span(st, et)
 
             fts = insert_span(timespan, fts)
+
             return free_span(rest_spans(ts), fts)
         else:
             return free_span(rest_spans(ts), fts)
 
     final_spans = free_span(time_spans, final_spans)
 
-    #
-    #for span in strip_tag(free_span(time_spans, final_spans)):
-    #    final_spans = insert_span(span, final_spans)
-    #
-    
     if precedes(start_time(ts_range),start_time(first_span(time_spans))):
         final_spans = insert_span(new_time_span(start_time(ts_range), start_time(first_span(time_spans))), final_spans)
 
