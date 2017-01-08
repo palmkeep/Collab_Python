@@ -67,7 +67,7 @@ def show_time_spans(tss):
     def show_time_spans_internal(span):
         show_span(span)
         print()
-    if strip_tag(tss): 
+    if first_span(tss): 
         for_each_span(tss, show_time_spans_internal)
 #
 

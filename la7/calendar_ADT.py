@@ -825,42 +825,40 @@ def remove_overlap(ts1, ts2):
     return time_spans
            
 
-def split_time(ts1, ts2):
-    pass
+# Not used anymore
 
-#
-#
-#
+#def split_time(ts1, ts2):
+#   pass
+
 
 
 # =========================================================================
 #  B. Conversion
 # =========================================================================
 
-# Transform a span into a duration. That is, merely calculate the length
-# of the span. This should be implemented in 6A.
 # -----
 # TODO: Komplettering 1
 # Comment:  Earlier length_of_span() let new_duration() take care of the 
-#           calculations that converted $mins => 60 into hours and minutes.
+#           calculations that converted $mins (=>60) into hours and minutes.
 #           We have now added those calculations into the length_of_span()
 #           function.
 # -----
+
 """
 def length_of_span(ts):
-    # To rewrite.
+    # Rewrite.
     mins = ts[1][1][1][1][1] + ts[1][1][1][0][1]*60 - ts[1][0][1][1][1] - ts[1][0][1][0][1]*60
     return ('duration', (('hour', mins//60), ('minute', mins%60)))
 """
+
+
 def length_of_span(ts):
     "time_span -> duration"
     st = start_time(ts)
     et = end_time(ts)
 
     mins = get_integer(get_hour(et))*60 - get_integer(get_hour(st))*60 + get_integer(get_minute(et)) - get_integer(get_minute(st))
-    hours = mins // 60
-    mins = mins % 60
-    return new_duration(new_hour(hours), new_minute(mins))
+    return new_duration(new_hour(mins//60), new_minute(mins%60))
 
 
 # Create a time object corresponding to the input "HH:MM".
