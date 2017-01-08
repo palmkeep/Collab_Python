@@ -65,8 +65,7 @@ def free_spans(cal_day, start, end):
             st = end_time(first_span(ts))
             et = start_time(first_span(rest_spans(ts)))
             timespan = new_time_span(st, et)
-            print(timespan)
-            ensure(timespan, is_time_span)
+
             fts = insert_span(timespan, fts)
             return free_span(rest_spans(ts), fts)
         else:
@@ -76,9 +75,13 @@ def free_spans(cal_day, start, end):
     #       Kommer du på något bra sätt att komma runt detta
     #       Koden ovanför är i princip din kod men istället för att direkt
     #       skapa en lista med spans så använder den sig av tim_spans grejerna
-    for span in strip_tag(free_span(time_spans, final_spans)):
-        final_spans = insert_span(span, final_spans)
-        
+    
+    final_spans = free_span(time_spans, final_spans)
+
+    #
+    #for span in strip_tag(free_span(time_spans, final_spans)):
+    #    final_spans = insert_span(span, final_spans)
+    #
     
     if precedes(start_time(ts_range),start_time(first_span(time_spans))):
         final_spans = insert_span(new_time_span(start_time(ts_range), start_time(first_span(time_spans))), final_spans)
